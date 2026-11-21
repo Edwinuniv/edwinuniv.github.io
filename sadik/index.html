@@ -21,7 +21,7 @@
   .brand .logo{width:42px;height:42px;border-radius:12px;background:var(--cedar);display:grid;place-items:center}
   .brand span em{color:var(--red);font-style:normal}
 
-  /* ---------- phone view ---------- */
+  /* ---------- phone / ride-widget view ---------- */
   .phone{max-width:480px;margin:0 auto;padding:22px 18px 40px}
   .phone header{margin-bottom:18px}
   .tag{color:var(--muted);font-size:.95rem;margin-top:4px}
@@ -35,6 +35,7 @@
   .chip.on{border-color:var(--cedar);background:var(--cedar);color:#fff}
   .chip.on small{color:#d6f5e5}
   .zones .chip{border-radius:14px;text-align:left;flex:1 1 46%}
+  .times .chip{flex:1 1 30%;text-align:center}
   .go{width:100%;padding:16px;border:none;border-radius:14px;background:var(--red);color:#fff;font-size:1.15rem;font-weight:800;margin-top:6px}
   .go:disabled{opacity:.4}
   .result h2{font-size:1.3rem;margin-bottom:6px}
@@ -46,13 +47,20 @@
   .shareBtn{display:block;width:100%;margin-top:10px;padding:12px;border:none;border-radius:10px;background:#fff;color:var(--cedar-dark);font-weight:700;font-size:.95rem}
   .browseTitle{font-size:1rem;color:var(--muted);margin:4px 2px 10px}
   .rideRow{background:var(--card);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-  .rideRow.mine{border:2px solid var(--cedar)}
   .rideRow .info b{display:block;font-size:1rem}
   .rideRow .info span{color:var(--muted);font-size:.85rem}
   .joinBtn{flex-shrink:0;background:var(--cedar);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem}
-  .joinBtn:disabled{background:var(--line);color:var(--muted)}
   .noRides{color:var(--muted);text-align:center;padding:18px 0}
   .link{background:none;border:none;color:var(--muted);text-decoration:underline;margin-top:14px;font-size:.9rem}
+  .chatBtn{display:block;width:100%;margin-top:10px;padding:12px;border:none;border-radius:10px;background:var(--cedar-dark);color:#fff;font-weight:700;font-size:.95rem}
+  .chatPanel{background:var(--card);border-radius:16px;padding:14px;margin-top:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  .chatMsgs{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+  .chatMsg{background:#f3f1ea;border-radius:10px;padding:8px 10px;font-size:.9rem}
+  .chatMsg b{color:var(--cedar-dark)}
+  .chatRow{display:flex;gap:8px}
+  .chatRow input{flex:1;padding:10px;border-radius:10px;border:2px solid var(--line);font-family:inherit}
+  .chatRow button{background:var(--cedar);color:#fff;border:none;border-radius:10px;padding:0 16px;font-weight:700}
+  .seatsWrap{margin-top:14px}
 
   /* ---------- big screen view ---------- */
   .screen{display:grid;grid-template-columns:340px 1fr;min-height:100vh}
@@ -81,7 +89,13 @@
   .empty{color:var(--muted);font-size:1.2rem;padding:40px 0}
   @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
   @media (max-width:800px){.screen{grid-template-columns:1fr}}
-  .modebar{position:fixed;bottom:0;left:0;right:0;background:#fff3cd;color:#7a5b00;font-size:.75rem;text-align:center;padding:4px}
+  .modebar{position:fixed;bottom:0;left:0;right:0;background:#fff3cd;color:#7a5b00;font-size:.75rem;text-align:center;padding:4px;z-index:50}
+
+  /* ---------- screen tabs / kiosk ---------- */
+  .tabbar{display:flex;gap:10px;margin-bottom:22px}
+  .tabbar button{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 18px;font-weight:700;color:var(--muted)}
+  .tabbar button.on{border-color:var(--cedar);color:var(--cedar);background:#eaf6ef}
+  .kiosk{max-width:520px}
 </style>
 </head>
 <body>
@@ -92,42 +106,7 @@
     <div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
     <p class="tag">Find classmates going your way to USJ.</p>
   </header>
-
-  <div id="form">
-    <div class="card">
-      <label class="q">1. Your first name</label>
-      <input id="name" type="text" maxlength="16" placeholder="e.g. Edwin" autocomplete="off">
-    </div>
-    <div class="card">
-      <label class="q">2. Where do you come from?</label>
-      <div id="zones" class="chips zones"></div>
-    </div>
-    <div class="card">
-      <label class="q">3. When do you leave in the morning?</label>
-      <div id="times" class="chips"></div>
-    </div>
-    <div class="card">
-      <label class="q">4. Do you have a car?</label>
-      <div id="cars" class="chips"></div>
-    </div>
-    <button id="go" class="go" disabled>Yalla, find my Sadik! 🚗</button>
-  </div>
-
-  <div id="result" class="hidden">
-    <div class="card result">
-      <h2 id="resTitle">My ride</h2>
-      <div class="big" id="resCount">0</div>
-      <p id="resText" class="tag"></p>
-      <div id="resPeople" class="people"></div>
-      <div id="resSave" class="save"></div>
-    </div>
-
-    <h3 class="browseTitle">Or join another ride 👇</h3>
-    <div id="browseList"></div>
-
-    <p class="tag" style="text-align:center">This updates live as classmates join 👀</p>
-    <div style="text-align:center"><button class="link" id="again">Change my answers</button></div>
-  </div>
+  <div id="widget-"></div>
 </div>
 
 <!-- ======================= BIG SCREEN VIEW ======================= -->
@@ -146,14 +125,26 @@
     </div>
   </aside>
   <main class="main">
-    <h1>Who can ride together? 🇱🇧</h1>
-    <p class="sub">Same area + same time = one car instead of many.</p>
-    <div class="stats">
-      <div class="stat"><b id="sGroups">0</b>ride groups found</div>
-      <div class="stat"><b id="sCars">0</b>cars off the road</div>
-      <div class="stat"><b id="sSave">0%</b>average fuel saved</div>
+    <div class="tabbar">
+      <button id="tabDash" class="on">🗺️ Live dashboard</button>
+      <button id="tabKiosk">🙋 Join a ride (no phone needed)</button>
     </div>
-    <div id="groups" class="grid"></div>
+
+    <div id="dashPane">
+      <h1>Who can ride together? 🇱🇧</h1>
+      <p class="sub">Same area + same time = one car instead of many.</p>
+      <div class="stats">
+        <div class="stat"><b id="sGroups">0</b>ride groups found</div>
+        <div class="stat"><b id="sCars">0</b>cars off the road</div>
+        <div class="stat"><b id="sSave">0%</b>average fuel saved</div>
+      </div>
+      <div id="groups" class="grid"></div>
+    </div>
+
+    <div id="kioskPane" class="hidden kiosk">
+      <h1 style="margin-bottom:14px">Join a ride from this screen</h1>
+      <div id="widget-k-"></div>
+    </div>
   </main>
 </div>
 
@@ -177,7 +168,7 @@ const firebaseConfig = {
 };
 
 /* =========================================================
-   2) DATA: areas, times
+   2) DATA: areas, times, seat counts
    ========================================================= */
 const ZONES = [
   { id:"metn-coast", name:"Metn Coast",   towns:"Jdeideh, Zalka, Antelias, Dbayeh" },
@@ -189,20 +180,22 @@ const ZONES = [
   { id:"south",      name:"South & Chouf",towns:"Aley, Damour, Jezzine" },
   { id:"dekwaneh",   name:"Near campus",  towns:"Dekwaneh, Sin el Fil, Mar Roukoz" }
 ];
-const TIMES = ["7:00","7:30","8:00","8:30","9:00"];
+const TIMES = ["7:00","7:30","8:00","8:30","9:00","9:30","10:00","10:30","11:00"];
 const CARS  = [{id:"yes",name:"Yes, I drive 🚗"},{id:"no",name:"No, I need a ride"}];
+const SEATS = [1,2,3,4];
 const zoneName = id => (ZONES.find(z=>z.id===id)||{}).name || id;
+const groupKey = (zone,time) => zone+"__"+time;
 
 /* =========================================================
-   3) STORE: Firebase if configured, otherwise local demo mode
+   3) RIDERS STORE: Firebase if configured, otherwise local demo mode
    ========================================================= */
 const LIVE = !firebaseConfig.apiKey.startsWith("PASTE");
-let listeners = [];
+let riderListeners = [];
 const Store = (() => {
   if (LIVE) {
     firebase.initializeApp(firebaseConfig);
     const ref = firebase.database().ref("riders");
-    ref.on("value", s => { const v=s.val()||{}; const list=Object.entries(v).map(([id,r])=>({...r,id})); listeners.forEach(f=>f(list)); });
+    ref.on("value", s => { const v=s.val()||{}; const list=Object.entries(v).map(([id,r])=>({...r,id})); riderListeners.forEach(f=>f(list)); });
     return {
       add: r => ref.push(r).key,
       update: (id,r) => ref.child(id).set(r),
@@ -213,7 +206,7 @@ const Store = (() => {
   const KEY="sadik-demo";
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}};
   const write=v=>{localStorage.setItem(KEY,JSON.stringify(v)); emit();};
-  const emit=()=>{const v=read(); const list=Object.entries(v).map(([id,r])=>({...r,id})); listeners.forEach(f=>f(list));};
+  const emit=()=>{const v=read(); const list=Object.entries(v).map(([id,r])=>({...r,id})); riderListeners.forEach(f=>f(list));};
   window.addEventListener("storage",e=>{if(e.key===KEY)emit();});
   setTimeout(emit,0);
   return {
@@ -222,43 +215,142 @@ const Store = (() => {
     reset: () => write({}),
   };
 })();
-const onRiders = f => listeners.push(f);
+const onRiders = f => riderListeners.push(f);
 if (!LIVE) document.getElementById("modebar").classList.remove("hidden");
+
+/* =========================================================
+   3b) CHAT STORE: one small thread per ride group (zone+time)
+   ========================================================= */
+const ChatStore = (() => {
+  if (LIVE) {
+    const ref = firebase.database().ref("chats");
+    let full = {};
+    const cbs = [];
+    ref.on("value", s => { full = s.val()||{}; cbs.forEach(f=>f(full)); });
+    return {
+      send:(gk,msg) => ref.child(gk).push(msg),
+      onChange:(f) => { cbs.push(f); f(full); },
+    };
+  }
+  const KEY="sadik-chats-demo";
+  const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}};
+  const write=v=>{localStorage.setItem(KEY,JSON.stringify(v)); emit();};
+  const cbs=[];
+  const emit=()=>{const v=read(); cbs.forEach(f=>f(v));};
+  window.addEventListener("storage",e=>{if(e.key===KEY)emit();});
+  return {
+    send:(gk,msg)=>{ const v=read(); v[gk]=v[gk]||{}; const id="m"+Date.now()+Math.random().toString(36).slice(2,6); v[gk][id]=msg; write(v); },
+    onChange:(f)=>{ cbs.push(f); setTimeout(()=>f(read()),0); },
+  };
+})();
 
 /* =========================================================
    4) MATCHING: same zone + same time
    ========================================================= */
 function groupRiders(list){
   const map={};
-  list.forEach(r=>{ const k=r.zone+"|"+r.time; (map[k]=map[k]||{zone:r.zone,time:r.time,people:[]}).people.push(r); });
+  list.forEach(r=>{ const k=groupKey(r.zone,r.time); (map[k]=map[k]||{zone:r.zone,time:r.time,people:[]}).people.push(r); });
   return Object.values(map).sort((a,b)=>b.people.length-a.people.length || a.time.localeCompare(b.time));
 }
 const savedPct = n => n>1 ? Math.round((1-1/n)*100) : 0;
+const seatInfo = people => {
+  const drivers=people.filter(p=>p.car==="yes");
+  const seatTotal=drivers.reduce((s,p)=>s+(parseInt(p.seats,10)||0),0);
+  const passengers=people.filter(p=>p.car==="no").length;
+  return {drivers:drivers.length, seatTotal, passengers};
+};
 
 /* =========================================================
-   5) PHONE VIEW
+   5) RIDE WIDGET (form + my ride + browse/join + chat)
+      Reusable: used for the phone view AND the screen's kiosk tab.
+      `prefix` picks which set of element ids to use ("" or "k-"),
+      `nsKey` keeps each widget's "who am I" identity separate.
    ========================================================= */
-function phone(){
-  document.getElementById("phoneView").classList.remove("hidden");
-  const sel={zone:null,time:null,car:null};
-  const $=id=>document.getElementById(id);
-  const makeChips=(el,items,key,html)=>{
+function initRideWidget(prefix, nsKey, container){
+  container.innerHTML = `
+    <div id="${prefix}form">
+      <div class="card">
+        <label class="q">1. Your first name</label>
+        <input id="${prefix}name" type="text" maxlength="16" placeholder="e.g. Edwin" autocomplete="off">
+      </div>
+      <div class="card">
+        <label class="q">2. Where do you come from?</label>
+        <div id="${prefix}zones" class="chips zones"></div>
+      </div>
+      <div class="card">
+        <label class="q">3. When do you leave in the morning?</label>
+        <div id="${prefix}times" class="chips times"></div>
+      </div>
+      <div class="card">
+        <label class="q">4. Do you have a car?</label>
+        <div id="${prefix}cars" class="chips"></div>
+        <div id="${prefix}seatsWrap" class="seatsWrap hidden">
+          <label class="q">How many free seats (besides you)?</label>
+          <div id="${prefix}seats" class="chips"></div>
+        </div>
+      </div>
+      <button id="${prefix}go" class="go" disabled>Yalla, find my Sadik! 🚗</button>
+    </div>
+
+    <div id="${prefix}result" class="hidden">
+      <div class="card result">
+        <h2 id="${prefix}resTitle">My ride</h2>
+        <div class="big" id="${prefix}resCount">0</div>
+        <p id="${prefix}resText" class="tag"></p>
+        <div id="${prefix}resPeople" class="people"></div>
+        <div id="${prefix}resSave" class="save"></div>
+        <div id="${prefix}chatWrap" class="hidden">
+          <button id="${prefix}chatToggle" class="chatBtn">💬 Open group chat</button>
+          <div id="${prefix}chatPanel" class="chatPanel hidden">
+            <div id="${prefix}chatMsgs" class="chatMsgs"></div>
+            <div class="chatRow">
+              <input id="${prefix}chatInput" type="text" maxlength="200" placeholder="Message your ride group…">
+              <button id="${prefix}chatSend">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="browseTitle">Or join another ride 👇</h3>
+      <div id="${prefix}browseList"></div>
+
+      <p class="tag" style="text-align:center">This updates live as classmates join 👀</p>
+      <div style="text-align:center"><button class="link" id="${prefix}again">Change my answers</button></div>
+    </div>
+  `;
+
+  const $=id=>document.getElementById(prefix+id);
+  const sel={zone:null,time:null,car:null,seats:null};
+  const makeChips=(el,items,key,html,after)=>{
     items.forEach(it=>{
       const b=document.createElement("button"); b.className="chip"; b.innerHTML=html(it);
-      b.onclick=()=>{ el.querySelectorAll(".chip").forEach(c=>c.classList.remove("on")); b.classList.add("on"); sel[key]=it.id||it; check(); };
+      b.onclick=()=>{ el.querySelectorAll(".chip").forEach(c=>c.classList.remove("on")); b.classList.add("on"); sel[key]=(it&&it.id!==undefined)?it.id:it; check(); if(after) after(); };
       el.appendChild(b);
     });
   };
   makeChips($("zones"),ZONES,"zone",z=>`${z.name}<small>${z.towns}</small>`);
   makeChips($("times"),TIMES,"time",t=>t);
-  makeChips($("cars"),CARS,"car",c=>c.name);
-  const check=()=>{$("go").disabled=!($("name").value.trim()&&sel.zone&&sel.time&&sel.car)};
+  makeChips($("cars"),CARS,"car",c=>c.name, ()=>{
+    const showSeats = sel.car==="yes";
+    $("seatsWrap").classList.toggle("hidden",!showSeats);
+    if(!showSeats){ sel.seats=null; }
+  });
+  makeChips($("seats"),SEATS,"seats",n=>`${n}`);
+  const check=()=>{
+    const needSeats = sel.car==="yes" ? !!sel.seats : true;
+    $("go").disabled=!($("name").value.trim()&&sel.zone&&sel.time&&sel.car&&needSeats);
+  };
   $("name").addEventListener("input",check);
 
-  let myId=localStorage.getItem("sadik-me");
+  let myId=localStorage.getItem(nsKey);
+  let chatOpen=false;
+  let chatGroupKey=null;
+  let allChats={};
+  ChatStore.onChange(c=>{ allChats=c; renderChat(); });
+
   $("go").onclick=()=>{
-    const r={name:$("name").value.trim().slice(0,16),zone:sel.zone,time:sel.time,car:sel.car,at:Date.now()};
-    if(myId) Store.update(myId,r); else { myId=Store.add(r); localStorage.setItem("sadik-me",myId); }
+    const r={name:$("name").value.trim().slice(0,16),zone:sel.zone,time:sel.time,car:sel.car,seats:sel.car==="yes"?sel.seats:0,at:Date.now()};
+    if(myId) Store.update(myId,r); else { myId=Store.add(r); localStorage.setItem(nsKey,myId); }
     if(!last.find(x=>x.id===myId)) last=[...last,{...r,id:myId}];
     else last=last.map(x=>x.id===myId?{...r,id:myId}:x);
     render(); show(true);
@@ -268,37 +360,49 @@ function phone(){
 
   let last=[];
   onRiders(list=>{ last=list; render(); });
+
   function render(){
     const me=last.find(r=>r.id===myId);
     if(!me){ return; }
     const mates=last.filter(r=>r.zone===me.zone&&r.time===me.time);
     const others=mates.filter(r=>r.id!==myId);
-    const drivers=mates.filter(r=>r.car==="yes").length;
+    const info=seatInfo(mates);
     $("resCount").textContent=others.length;
     $("resTitle").textContent=`${zoneName(me.zone)} · ${me.time}`;
     $("resText").textContent= others.length ? `classmate${others.length>1?"s":""} leave from your area at the same time!` : "No match yet… wait a few seconds 👀";
-    $("resPeople").innerHTML=mates.map(r=>`<span class="person ${r.car==="yes"?"car":""}">${esc(r.name)}${r.id===myId?" (you)":""}</span>`).join("");
+    $("resPeople").innerHTML=mates.map(r=>`<span class="person ${r.car==="yes"?"car":""}">${esc(r.name)}${r.car==="yes"&&r.seats?` (${r.seats} seat${r.seats>1?"s":""})`:""}${r.id===myId?" (you)":""}</span>`).join("");
     if(others.length){
-      $("resSave").innerHTML = drivers
-        ? `🚗 ${drivers} driver${drivers>1?"s":""} in your group. Split the fuel ${mates.length} ways and save about <b>${savedPct(mates.length)}%</b>.`
-        : `Nobody drives yet. Ask a friend with a car to join and you're all set!`;
+      if(info.drivers===0){
+        $("resSave").innerHTML = `Nobody drives yet. Ask a friend with a car to join and you're all set!`;
+      } else if(info.seatTotal>=info.passengers){
+        $("resSave").innerHTML = `🚗 ${info.drivers} driver${info.drivers>1?"s":""}, ${info.seatTotal} seat${info.seatTotal>1?"s":""} — enough for everyone! Split the fuel ${mates.length} ways and save about <b>${savedPct(mates.length)}%</b>.`;
+      } else {
+        $("resSave").innerHTML = `🚗 ${info.drivers} driver${info.drivers>1?"s":""} offering ${info.seatTotal} seat${info.seatTotal!==1?"s":""}, but ${info.passengers} need a ride. ${info.passengers-info.seatTotal} more seat${info.passengers-info.seatTotal>1?"s":""} needed.`;
+      }
+      $("chatWrap").classList.remove("hidden");
+      chatGroupKey=groupKey(me.zone,me.time);
+      renderChat();
     } else {
-      $("resSave").innerHTML = `Share the link with friends from ${zoneName(me.zone)}! <button id="shareBtn" class="shareBtn">📤 Share Sadik</button>`;
-      const btn=document.getElementById("shareBtn");
+      $("resSave").innerHTML = `Share the link with friends from ${zoneName(me.zone)}! <button id="${prefix}shareBtn" class="shareBtn">📤 Share Sadik</button>`;
+      const btn=$("shareBtn");
       if(btn) btn.onclick=()=>shareApp(zoneName(me.zone));
+      $("chatWrap").classList.add("hidden");
+      chatGroupKey=null;
     }
     renderBrowseList(me);
   }
+
   function renderBrowseList(me){
     const groups=groupRiders(last);
     const other=groups.filter(g=>!(g.zone===me.zone&&g.time===me.time));
     const el=$("browseList");
     if(!other.length){ el.innerHTML=`<div class="noRides">No other rides posted yet — check back soon, or share Sadik with classmates!</div>`; return; }
     el.innerHTML=other.map(g=>{
-      const d=g.people.filter(p=>p.car==="yes").length;
+      const info=seatInfo(g.people);
       const names=g.people.map(p=>p.name).join(", ");
+      const seatTxt = info.drivers ? ` · ${info.seatTotal} seat${info.seatTotal!==1?"s":""} free` : " · no driver yet";
       return `<div class="rideRow">
-        <div class="info"><b>📍 ${zoneName(g.zone)} · ${g.time}</b><span>${names}${d?` · ${d} driver${d>1?"s":""}`:" · no driver yet"}</span></div>
+        <div class="info"><b>📍 ${zoneName(g.zone)} · ${g.time}</b><span>${names}${seatTxt}</span></div>
         <button class="joinBtn" data-zone="${g.zone}" data-time="${g.time}">Join</button>
       </div>`;
     }).join("");
@@ -306,6 +410,7 @@ function phone(){
       b.onclick=()=>joinGroup(b.dataset.zone,b.dataset.time);
     });
   }
+
   function joinGroup(zone,time){
     const me=last.find(r=>r.id===myId); if(!me) return;
     const r={...me,zone,time};
@@ -313,8 +418,42 @@ function phone(){
     Store.update(myId,r);
     last=last.map(x=>x.id===myId?{...r,id:myId}:x);
     render();
-    window.scrollTo({top:0,behavior:"smooth"});
+    container.scrollIntoView({behavior:"smooth",block:"start"});
   }
+
+  function renderChat(){
+    if(!chatGroupKey) return;
+    const panel=$("chatPanel");
+    if(panel.classList.contains("hidden")) return;
+    const msgs=allChats[chatGroupKey]||{};
+    const list=Object.values(msgs).sort((a,b)=>a.at-b.at);
+    $("chatMsgs").innerHTML = list.length
+      ? list.map(m=>`<div class="chatMsg"><b>${esc(m.name)}:</b> ${esc(m.text)}</div>`).join("")
+      : `<div class="noRides" style="padding:6px 0">Say hi to your ride group 👋</div>`;
+    $("chatMsgs").scrollTop = $("chatMsgs").scrollHeight;
+  }
+
+  const chatToggleBtn=$("chatToggle");
+  if(chatToggleBtn) chatToggleBtn.onclick=()=>{
+    chatOpen=!chatOpen;
+    $("chatPanel").classList.toggle("hidden",!chatOpen);
+    chatToggleBtn.textContent = chatOpen ? "💬 Hide group chat" : "💬 Open group chat";
+    if(chatOpen) renderChat();
+  };
+  const sendChat=()=>{
+    const input=$("chatInput");
+    const text=input.value.trim();
+    const me=last.find(r=>r.id===myId);
+    if(!text||!chatGroupKey||!me) return;
+    ChatStore.send(chatGroupKey,{name:me.name,text:text.slice(0,200),at:Date.now()});
+    input.value="";
+  };
+  const chatSendBtn=$("chatSend");
+  if(chatSendBtn){
+    chatSendBtn.onclick=sendChat;
+    $("chatInput").addEventListener("keydown",e=>{ if(e.key==="Enter") sendChat(); });
+  }
+
   async function shareApp(zone){
     const url=location.href.split("?")[0];
     const text=`Join me on Sadik to find a ride from ${zone} to USJ! 🚗`;
@@ -323,17 +462,28 @@ function phone(){
     }
     try{
       await navigator.clipboard.writeText(`${text} ${url}`);
-      const btn=document.getElementById("shareBtn");
+      const btn=$("shareBtn");
       if(btn){ const old=btn.textContent; btn.textContent="✅ Link copied!"; setTimeout(()=>btn.textContent=old,1800); }
     }catch(e){
       prompt("Copy this link:", url);
     }
   }
+
   if(myId) show(true);
 }
 
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
 /* =========================================================
-   6) BIG SCREEN VIEW  (open with ?screen)
+   6) PHONE VIEW
+   ========================================================= */
+function phone(){
+  document.getElementById("phoneView").classList.remove("hidden");
+  initRideWidget("","sadik-me",document.getElementById("widget-"));
+}
+
+/* =========================================================
+   7) BIG SCREEN VIEW  (open with ?screen)
    ========================================================= */
 function screen(){
   document.getElementById("screenView").classList.remove("hidden");
@@ -354,11 +504,11 @@ function screen(){
     const el=document.getElementById("groups");
     if(!list.length){ el.innerHTML=`<div class="empty">Waiting for the first classmate to scan… 📱</div>`; return; }
     el.innerHTML=groups.map(g=>{
-      const d=g.people.filter(p=>p.car==="yes").length;
+      const info=seatInfo(g.people);
       return `<div class="group ${g.people.length>1?"":"solo"}">
         <h3>📍 ${zoneName(g.zone)}</h3><div class="when">Leaving at ${g.time}</div>
         <div class="people">${g.people.map(p=>`<span class="person ${p.car==="yes"?"car":""}">${esc(p.name)}</span>`).join("")}</div>
-        ${g.people.length>1?`<span class="badge">${d?`Save ${savedPct(g.people.length)}% on fuel`:"Needs a driver"}</span>`:""}
+        ${g.people.length>1?`<span class="badge">${info.drivers?`${info.seatTotal} seat${info.seatTotal!==1?"s":""} free`:"Needs a driver"}</span>`:""}
       </div>`;
     }).join("");
   });
@@ -367,9 +517,20 @@ function screen(){
   const FAKE=["Maya","Karim","Rita","Elie","Nour","Joe","Lea","Charbel","Yara","Marc","Tia","Ralph","Christa","Georges","Sara"];
   document.getElementById("fake").onclick=()=>{
     const z=ZONES[Math.floor(Math.random()*4)].id;   // first 4 zones so matches happen often
-    Store.add({name:FAKE[Math.floor(Math.random()*FAKE.length)],zone:z,time:TIMES[1+Math.floor(Math.random()*2)],car:Math.random()<.4?"yes":"no",at:Date.now()});
+    const isDriver=Math.random()<.4;
+    Store.add({name:FAKE[Math.floor(Math.random()*FAKE.length)],zone:z,time:TIMES[1+Math.floor(Math.random()*2)],car:isDriver?"yes":"no",seats:isDriver?(1+Math.floor(Math.random()*3)):0,at:Date.now()});
   };
   document.getElementById("reset").onclick=()=>{ if(confirmReset()) Store.reset(); };
+
+  // tabs: live dashboard vs. in-person kiosk (join without a phone)
+  const tabDash=document.getElementById("tabDash"), tabKiosk=document.getElementById("tabKiosk");
+  const dashPane=document.getElementById("dashPane"), kioskPane=document.getElementById("kioskPane");
+  let kioskBuilt=false;
+  tabDash.onclick=()=>{ tabDash.classList.add("on"); tabKiosk.classList.remove("on"); dashPane.classList.remove("hidden"); kioskPane.classList.add("hidden"); };
+  tabKiosk.onclick=()=>{
+    tabKiosk.classList.add("on"); tabDash.classList.remove("on"); kioskPane.classList.remove("hidden"); dashPane.classList.add("hidden");
+    if(!kioskBuilt){ initRideWidget("k-","sadik-me-kiosk",document.getElementById("widget-k-")); kioskBuilt=true; }
+  };
 }
 // simple two-click reset instead of a browser dialog
 let resetArmed=false;
@@ -378,7 +539,6 @@ function confirmReset(){
   if(resetArmed){ resetArmed=false; b.textContent="Reset all"; return true; }
   resetArmed=true; b.textContent="Click again to reset"; setTimeout(()=>{resetArmed=false;b.textContent="Reset all";},3000); return false;
 }
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 new URLSearchParams(location.search).has("screen") ? screen() : phone();
 </script>
