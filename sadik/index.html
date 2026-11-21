@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sadik – Share the ride to USJ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cedar:#0f7b4a; --cedar-dark:#0a5534; --red:#e63946; --cream:#fdf8f0;
+    --ink:#1b1b1b; --muted:#6b7280; --card:#ffffff; --line:#e7e2d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Poppins,system-ui,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+  button{font-family:inherit;cursor:pointer}
+  .hidden{display:none!important}
+
+  /* ---------- header ---------- */
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.5rem;color:var(--cedar)}
+  .brand .logo{width:42px;height:42px;border-radius:12px;background:var(--cedar);display:grid;place-items:center}
+  .brand span em{color:var(--red);font-style:normal}
+
+  /* ---------- phone view ---------- */
+  .phone{max-width:480px;margin:0 auto;padding:22px 18px 40px}
+  .phone header{margin-bottom:18px}
+  .tag{color:var(--muted);font-size:.95rem;margin-top:4px}
+  .card{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.06);margin-bottom:16px}
+  label.q{display:block;font-weight:600;margin:4px 0 10px}
+  input[type=text]{width:100%;padding:14px;border-radius:12px;border:2px solid var(--line);font-size:1rem;font-family:inherit}
+  input[type=text]:focus{outline:none;border-color:var(--cedar)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;font-size:.95rem;font-weight:600;color:var(--ink)}
+  .chip small{display:block;font-weight:400;color:var(--muted);font-size:.72rem}
+  .chip.on{border-color:var(--cedar);background:var(--cedar);color:#fff}
+  .chip.on small{color:#d6f5e5}
+  .zones .chip{border-radius:14px;text-align:left;flex:1 1 46%}
+  .go{width:100%;padding:16px;border:none;border-radius:14px;background:var(--red);color:#fff;font-size:1.15rem;font-weight:800;margin-top:6px}
+  .go:disabled{opacity:.4}
+  .result h2{font-size:1.3rem;margin-bottom:6px}
+  .big{font-size:3rem;font-weight:800;color:var(--cedar);line-height:1}
+  .people{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .person{background:#eaf6ef;color:var(--cedar-dark);border-radius:999px;padding:6px 12px;font-weight:600}
+  .person.car::after{content:" 🚗"}
+  .save{background:var(--cedar);color:#fff;border-radius:14px;padding:14px;font-weight:600}
+  .link{background:none;border:none;color:var(--muted);text-decoration:underline;margin-top:14px;font-size:.9rem}
+
+  /* ---------- big screen view ---------- */
+  .screen{display:grid;grid-template-columns:340px 1fr;min-height:100vh}
+  .side{background:var(--cedar);color:#fff;padding:32px 28px;display:flex;flex-direction:column;gap:22px}
+  .side .brand{color:#fff}
+  .side .brand .logo{background:#fff}
+  .qrbox{background:#fff;border-radius:20px;padding:16px;display:grid;place-items:center}
+  .qrbox img,.qrbox canvas{width:100%!important;height:auto!important}
+  .url{font-size:.8rem;word-break:break-all;opacity:.85}
+  .counter{font-size:4.2rem;font-weight:800;line-height:1}
+  .counter small{display:block;font-size:1rem;font-weight:400;opacity:.85}
+  .tools{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .tools button{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:8px 12px;font-size:.8rem}
+  .main{padding:32px 36px}
+  .main h1{font-size:2.2rem}
+  .main .sub{color:var(--muted);margin-bottom:24px}
+  .stats{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+  .stat{background:#fff;border-radius:16px;padding:16px 20px;min-width:170px;box-shadow:0 4px 18px rgba(0,0,0,.05)}
+  .stat b{display:block;font-size:2.2rem;color:var(--red)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+  .group{background:#fff;border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.06);border-top:6px solid var(--cedar);animation:pop .45s ease}
+  .group.solo{border-top-color:var(--line);opacity:.7}
+  .group h3{font-size:1.15rem}
+  .group .when{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+  .group .badge{display:inline-block;background:var(--red);color:#fff;border-radius:999px;padding:3px 10px;font-size:.8rem;font-weight:600;margin-top:10px}
+  .empty{color:var(--muted);font-size:1.2rem;padding:40px 0}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  @media (max-width:800px){.screen{grid-template-columns:1fr}}
+  .modebar{position:fixed;bottom:0;left:0;right:0;background:#fff3cd;color:#7a5b00;font-size:.75rem;text-align:center;padding:4px}
+</style>
+</head>
+<body>
+
+<!-- ======================= PHONE VIEW ======================= -->
+<div id="phoneView" class="phone hidden">
+  <header>
+    <div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
+    <p class="tag">Find classmates going your way to USJ.</p>
+  </header>
+
+  <div id="form">
+    <div class="card">
+      <label class="q">1. Your first name</label>
+      <input id="name" type="text" maxlength="16" placeholder="e.g. Edwin" autocomplete="off">
+    </div>
+    <div class="card">
+      <label class="q">2. Where do you come from?</label>
+      <div id="zones" class="chips zones"></div>
+    </div>
+    <div class="card">
+      <label class="q">3. When do you leave in the morning?</label>
+      <div id="times" class="chips"></div>
+    </div>
+    <div class="card">
+      <label class="q">4. Do you have a car?</label>
+      <div id="cars" class="chips"></div>
+    </div>
+    <button id="go" class="go" disabled>Yalla, find my Sadik! 🚗</button>
+  </div>
+
+  <div id="result" class="hidden">
+    <div class="card result">
+      <h2 id="resTitle">Your ride group</h2>
+      <div class="big" id="resCount">0</div>
+      <p id="resText" class="tag"></p>
+      <div id="resPeople" class="people"></div>
+      <div id="resSave" class="save"></div>
+    </div>
+    <p class="tag" style="text-align:center">This updates live as classmates join 👀</p>
+    <div style="text-align:center"><button class="link" id="again">Change my answers</button></div>
+  </div>
+</div>
+
+<!-- ======================= BIG SCREEN VIEW ======================= -->
+<div id="screenView" class="screen hidden">
+  <aside class="side">
+    <div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
+    <div>
+      <div style="font-weight:600;margin-bottom:10px">📱 Scan to join</div>
+      <div class="qrbox" id="qr"></div>
+      <p class="url" id="joinUrl"></p>
+    </div>
+    <div class="counter"><span id="count">0</span><small>classmates joined</small></div>
+    <div class="tools">
+      <button id="fake">+ Add fake classmate</button>
+      <button id="reset">Reset all</button>
+    </div>
+  </aside>
+  <main class="main">
+    <h1>Who can ride together? 🇱🇧</h1>
+    <p class="sub">Same area + same time = one car instead of many.</p>
+    <div class="stats">
+      <div class="stat"><b id="sGroups">0</b>ride groups found</div>
+      <div class="stat"><b id="sCars">0</b>cars off the road</div>
+      <div class="stat"><b id="sSave">0%</b>average fuel saved</div>
+    </div>
+    <div id="groups" class="grid"></div>
+  </main>
+</div>
+
+<div id="modebar" class="modebar hidden">Demo mode (no Firebase yet): works across tabs on this one computer only.</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* =========================================================
+   1) PASTE YOUR FIREBASE CONFIG HERE (see README.md)
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_API_KEY",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+
+/* =========================================================
+   2) DATA: areas, times
+   ========================================================= */
+const ZONES = [
+  { id:"metn-coast", name:"Metn Coast",   towns:"Jdeideh, Zalka, Antelias, Dbayeh" },
+  { id:"upper-metn", name:"Upper Metn",   towns:"Broummana, Bikfaya, Beit Mery, Dik El Mehdi" },
+  { id:"beirut",     name:"Beirut",       towns:"Achrafieh, Hamra, Badaro" },
+  { id:"baabda",     name:"Baabda",       towns:"Hazmieh, Hadath, Furn el Chebbak" },
+  { id:"keserwan",   name:"Keserwan",     towns:"Jounieh, Kaslik, Zouk" },
+  { id:"jbeil",      name:"Jbeil & North",towns:"Byblos, Batroun, Amchit" },
+  { id:"south",      name:"South & Chouf",towns:"Aley, Damour, Jezzine" },
+  { id:"dekwaneh",   name:"Near campus",  towns:"Dekwaneh, Sin el Fil, Mar Roukoz" }
+];
+const TIMES = ["7:00","7:30","8:00","8:30","9:00"];
+const CARS  = [{id:"yes",name:"Yes, I drive 🚗"},{id:"no",name:"No, I need a ride"}];
+const zoneName = id => (ZONES.find(z=>z.id===id)||{}).name || id;
+
+/* =========================================================
+   3) STORE: Firebase if configured, otherwise local demo mode
+   ========================================================= */
+const LIVE = !firebaseConfig.apiKey.startsWith("PASTE");
+let listeners = [];
+const Store = (() => {
+  if (LIVE) {
+    firebase.initializeApp(firebaseConfig);
+    const ref = firebase.database().ref("riders");
+    ref.on("value", s => { const v=s.val()||{}; const list=Object.entries(v).map(([id,r])=>({...r,id})); listeners.forEach(f=>f(list)); });
+    return {
+      add: r => ref.push(r).key,
+      update: (id,r) => ref.child(id).set(r),
+      reset: () => ref.remove(),
+    };
+  }
+  // demo mode: localStorage, synced between tabs
+  const KEY="sadik-demo";
+  const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}};
+  const write=v=>{localStorage.setItem(KEY,JSON.stringify(v)); emit();};
+  const emit=()=>{const v=read(); const list=Object.entries(v).map(([id,r])=>({...r,id})); listeners.forEach(f=>f(list));};
+  window.addEventListener("storage",e=>{if(e.key===KEY)emit();});
+  setTimeout(emit,0);
+  return {
+    add: r => { const v=read(); const id="r"+Date.now()+Math.random().toString(36).slice(2,6); v[id]=r; write(v); return id; },
+    update: (id,r) => { const v=read(); v[id]=r; write(v); },
+    reset: () => write({}),
+  };
+})();
+const onRiders = f => listeners.push(f);
+if (!LIVE) document.getElementById("modebar").classList.remove("hidden");
+
+/* =========================================================
+   4) MATCHING: same zone + same time
+   ========================================================= */
+function groupRiders(list){
+  const map={};
+  list.forEach(r=>{ const k=r.zone+"|"+r.time; (map[k]=map[k]||{zone:r.zone,time:r.time,people:[]}).people.push(r); });
+  return Object.values(map).sort((a,b)=>b.people.length-a.people.length || a.time.localeCompare(b.time));
+}
+const savedPct = n => n>1 ? Math.round((1-1/n)*100) : 0;
+
+/* =========================================================
+   5) PHONE VIEW
+   ========================================================= */
+function phone(){
+  document.getElementById("phoneView").classList.remove("hidden");
+  const sel={zone:null,time:null,car:null};
+  const $=id=>document.getElementById(id);
+  const makeChips=(el,items,key,html)=>{
+    items.forEach(it=>{
+      const b=document.createElement("button"); b.className="chip"; b.innerHTML=html(it);
+      b.onclick=()=>{ el.querySelectorAll(".chip").forEach(c=>c.classList.remove("on")); b.classList.add("on"); sel[key]=it.id||it; check(); };
+      el.appendChild(b);
+    });
+  };
+  makeChips($("zones"),ZONES,"zone",z=>`${z.name}<small>${z.towns}</small>`);
+  makeChips($("times"),TIMES,"time",t=>t);
+  makeChips($("cars"),CARS,"car",c=>c.name);
+  const check=()=>{$("go").disabled=!($("name").value.trim()&&sel.zone&&sel.time&&sel.car)};
+  $("name").addEventListener("input",check);
+
+  let myId=localStorage.getItem("sadik-me");
+  $("go").onclick=()=>{
+    const r={name:$("name").value.trim().slice(0,16),zone:sel.zone,time:sel.time,car:sel.car,at:Date.now()};
+    if(myId) Store.update(myId,r); else { myId=Store.add(r); localStorage.setItem("sadik-me",myId); }
+    if(!last.find(x=>x.id===myId)) last=[...last,{...r,id:myId}];
+    else last=last.map(x=>x.id===myId?{...r,id:myId}:x);
+    render(); show(true);
+  };
+  $("again").onclick=()=>show(false);
+  const show=res=>{$("form").classList.toggle("hidden",res);$("result").classList.toggle("hidden",!res);};
+
+  let last=[];
+  onRiders(list=>{ last=list; render(); });
+  function render(){
+    const me=last.find(r=>r.id===myId);
+    if(!me){ return; }
+    const mates=last.filter(r=>r.zone===me.zone&&r.time===me.time);
+    const others=mates.filter(r=>r.id!==myId);
+    const drivers=mates.filter(r=>r.car==="yes").length;
+    $("resCount").textContent=others.length;
+    $("resTitle").textContent=`${zoneName(me.zone)} · ${me.time}`;
+    $("resText").textContent= others.length ? `classmate${others.length>1?"s":""} leave from your area at the same time!` : "No match yet… wait a few seconds 👀";
+    $("resPeople").innerHTML=mates.map(r=>`<span class="person ${r.car==="yes"?"car":""}">${esc(r.name)}${r.id===myId?" (you)":""}</span>`).join("");
+    $("resSave").innerHTML = others.length
+      ? (drivers? `🚗 ${drivers} driver${drivers>1?"s":""} in your group. Split the fuel ${mates.length} ways and save about <b>${savedPct(mates.length)}%</b>.`
+                : `Nobody drives yet. Ask a friend with a car to join and you're all set!`)
+      : `Share the link with friends from ${zoneName(me.zone)}!`;
+  }
+  if(myId) show(true);
+}
+
+/* =========================================================
+   6) BIG SCREEN VIEW  (open with ?screen)
+   ========================================================= */
+function screen(){
+  document.getElementById("screenView").classList.remove("hidden");
+  const joinUrl=location.href.split("?")[0].split("#")[0];
+  document.getElementById("joinUrl").textContent=joinUrl;
+  try{ new QRCode(document.getElementById("qr"),{text:joinUrl,width:280,height:280,colorDark:"#0a5534",colorLight:"#ffffff"}); }catch(e){}
+
+  onRiders(list=>{
+    const groups=groupRiders(list);
+    const real=groups.filter(g=>g.people.length>1);
+    const carsBefore=list.length;                             // everyone alone
+    const carsAfter=groups.reduce((s,g)=>s+Math.max(1,Math.ceil(g.people.length/4)),0); // 4 per car
+    const avg= real.length? Math.round(real.reduce((s,g)=>s+savedPct(g.people.length),0)/real.length):0;
+    document.getElementById("count").textContent=list.length;
+    document.getElementById("sGroups").textContent=real.length;
+    document.getElementById("sCars").textContent=Math.max(0,carsBefore-carsAfter);
+    document.getElementById("sSave").textContent=avg+"%";
+    const el=document.getElementById("groups");
+    if(!list.length){ el.innerHTML=`<div class="empty">Waiting for the first classmate to scan… 📱</div>`; return; }
+    el.innerHTML=groups.map(g=>{
+      const d=g.people.filter(p=>p.car==="yes").length;
+      return `<div class="group ${g.people.length>1?"":"solo"}">
+        <h3>📍 ${zoneName(g.zone)}</h3><div class="when">Leaving at ${g.time}</div>
+        <div class="people">${g.people.map(p=>`<span class="person ${p.car==="yes"?"car":""}">${esc(p.name)}</span>`).join("")}</div>
+        ${g.people.length>1?`<span class="badge">${d?`Save ${savedPct(g.people.length)}% on fuel`:"Needs a driver"}</span>`:""}
+      </div>`;
+    }).join("");
+  });
+
+  // rehearsal tools
+  const FAKE=["Maya","Karim","Rita","Elie","Nour","Joe","Lea","Charbel","Yara","Marc","Tia","Ralph","Christa","Georges","Sara"];
+  document.getElementById("fake").onclick=()=>{
+    const z=ZONES[Math.floor(Math.random()*4)].id;   // first 4 zones so matches happen often
+    Store.add({name:FAKE[Math.floor(Math.random()*FAKE.length)],zone:z,time:TIMES[1+Math.floor(Math.random()*2)],car:Math.random()<.4?"yes":"no",at:Date.now()});
+  };
+  document.getElementById("reset").onclick=()=>{ if(confirmReset()) Store.reset(); };
+}
+// simple two-click reset instead of a browser dialog
+let resetArmed=false;
+function confirmReset(){
+  const b=document.getElementById("reset");
+  if(resetArmed){ resetArmed=false; b.textContent="Reset all"; return true; }
+  resetArmed=true; b.textContent="Click again to reset"; setTimeout(()=>{resetArmed=false;b.textContent="Reset all";},3000); return false;
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+new URLSearchParams(location.search).has("screen") ? screen() : phone();
+</script>
+</body>
+</html>
