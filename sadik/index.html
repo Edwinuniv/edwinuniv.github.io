@@ -3,171 +3,327 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f7b4a">
 <title>Sadik – Share the ride to USJ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --cedar:#0f7b4a; --cedar-dark:#0a5534; --red:#e63946; --cream:#fdf8f0;
-    --ink:#1b1b1b; --muted:#6b7280; --card:#ffffff; --line:#e7e2d8;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:Poppins,system-ui,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
-  button{font-family:inherit;cursor:pointer}
-  .hidden{display:none!important}
+:root{
+  --cedar:#0f7b4a; --cedar-dark:#0a5534; --cedar-soft:#eaf6ef; --red:#e63946; --red-soft:#fdeaec;
+  --cream:#fdf8f0; --ink:#1b1b1b; --muted:#6b7280; --card:#ffffff; --line:#ece6da; --amber:#f4a72a;
+  --radius:18px; --shadow:0 4px 18px rgba(16,24,40,.06); --tab-h:66px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--cream);color:var(--ink);font-size:15px;line-height:1.45}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input{font-family:inherit;font-size:16px}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.small{font-size:.82rem}
 
-  /* ---------- header ---------- */
-  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.5rem;color:var(--cedar)}
-  .brand .logo{width:42px;height:42px;border-radius:12px;background:var(--cedar);display:grid;place-items:center}
-  .brand span em{color:var(--red);font-style:normal}
+/* ---------- brand ---------- */
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.3rem;color:var(--cedar);letter-spacing:-.01em}
+.brand .logo{width:36px;height:36px;border-radius:11px;background:var(--cedar);display:grid;place-items:center;font-size:1.1rem}
+.brand em{color:var(--red);font-style:normal}
 
-  /* ---------- phone / ride-widget view ---------- */
-  .phone{max-width:480px;margin:0 auto;padding:22px 18px 40px}
-  .phone header{margin-bottom:18px}
-  .tag{color:var(--muted);font-size:.95rem;margin-top:4px}
-  .card{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.06);margin-bottom:16px}
-  label.q{display:block;font-weight:600;margin:4px 0 10px}
-  input[type=text]{width:100%;padding:14px;border-radius:12px;border:2px solid var(--line);font-size:1rem;font-family:inherit}
-  input[type=text]:focus{outline:none;border-color:var(--cedar)}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{border:2px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;font-size:.95rem;font-weight:600;color:var(--ink)}
-  .chip small{display:block;font-weight:400;color:var(--muted);font-size:.72rem}
-  .chip.on{border-color:var(--cedar);background:var(--cedar);color:#fff}
-  .chip.on small{color:#d6f5e5}
-  .zones .chip{border-radius:14px;text-align:left;flex:1 1 46%}
-  .times .chip{flex:1 1 30%;text-align:center}
-  .go{width:100%;padding:16px;border:none;border-radius:14px;background:var(--red);color:#fff;font-size:1.15rem;font-weight:800;margin-top:6px}
-  .go:disabled{opacity:.4}
-  .result h2{font-size:1.3rem;margin-bottom:6px}
-  .big{font-size:3rem;font-weight:800;color:var(--cedar);line-height:1}
-  .people{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-  .person{background:#eaf6ef;color:var(--cedar-dark);border-radius:999px;padding:6px 12px;font-weight:600}
-  .person.car::after{content:" 🚗"}
-  .save{background:var(--cedar);color:#fff;border-radius:14px;padding:14px;font-weight:600}
-  .shareBtn{display:block;width:100%;margin-top:10px;padding:12px;border:none;border-radius:10px;background:#fff;color:var(--cedar-dark);font-weight:700;font-size:.95rem}
-  .browseTitle{font-size:1rem;color:var(--muted);margin:4px 2px 10px}
-  .rideRow{background:var(--card);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-  .rideRow .info b{display:block;font-size:1rem}
-  .rideRow .info span{color:var(--muted);font-size:.85rem}
-  .joinBtn{flex-shrink:0;background:var(--cedar);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem}
-  .noRides{color:var(--muted);text-align:center;padding:18px 0}
-  .link{background:none;border:none;color:var(--muted);text-decoration:underline;margin-top:14px;font-size:.9rem}
-  .chatBtn{display:block;width:100%;margin-top:10px;padding:12px;border:none;border-radius:10px;background:var(--cedar-dark);color:#fff;font-weight:700;font-size:.95rem}
-  .chatPanel{background:var(--card);border-radius:16px;padding:14px;margin-top:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-  .chatMsgs{max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-  .chatMsg{background:#f3f1ea;border-radius:10px;padding:8px 10px;font-size:.9rem}
-  .chatMsg b{color:var(--cedar-dark)}
-  .chatRow{display:flex;gap:8px}
-  .chatRow input{flex:1;padding:10px;border-radius:10px;border:2px solid var(--line);font-family:inherit}
-  .chatRow button{background:var(--cedar);color:#fff;border:none;border-radius:10px;padding:0 16px;font-weight:700}
-  .seatsWrap{margin-top:14px}
-  .plusBtn{display:block;width:100%;margin-top:12px;padding:14px;border:none;border-radius:12px;background:var(--red);color:#fff;font-weight:800;font-size:1rem}
-  .plusBtn.owned{background:#fff;color:var(--red);border:2px solid var(--red)}
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:100;padding:18px}
-  .plusCard{background:#fff;border-radius:20px;padding:24px;max-width:380px;width:100%}
-  .plusCard h2{color:var(--red);font-size:1.5rem}
-  .plusCard .price{font-size:2.2rem;font-weight:800;margin:8px 0 2px}
-  .plusCard .price small{font-size:1rem;color:var(--muted);font-weight:400}
-  .plusCard ul{list-style:none;margin:14px 0}
-  .plusCard li{padding:6px 0;border-bottom:1px solid var(--line)}
-  .plusCard .note{font-size:.75rem;color:var(--muted);text-align:center;margin-top:8px}
-  .person.plus::before{content:"⭐ "}
+/* ====================== PHONE APP ====================== */
+#app{max-width:480px;margin:0 auto;min-height:100dvh;position:relative;background:var(--cream)}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;padding-top:calc(14px + env(safe-area-inset-top));background:rgba(253,248,240,.92);backdrop-filter:blur(10px)}
+.topbar .right{display:flex;gap:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:6px 12px;font-weight:700;font-size:.8rem}
+.pill.plus{background:var(--red-soft);color:var(--red)}
+.pill.get{border:2px solid var(--red);color:var(--red);background:#fff}
+.pill.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+#view{padding:4px 18px calc(var(--tab-h) + 28px + env(safe-area-inset-bottom))}
+.enter{animation:enter .28s ease}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-  /* ---------- big screen view ---------- */
-  .screen{display:grid;grid-template-columns:340px 1fr;min-height:100vh}
-  .side{background:var(--cedar);color:#fff;padding:32px 28px;display:flex;flex-direction:column;gap:22px}
-  .side .brand{color:#fff}
-  .side .brand .logo{background:#fff}
-  .qrbox{background:#fff;border-radius:20px;padding:16px;display:grid;place-items:center}
-  .qrbox img,.qrbox canvas{width:100%!important;height:auto!important}
-  .url{font-size:.8rem;word-break:break-all;opacity:.85}
-  .counter{font-size:4.2rem;font-weight:800;line-height:1}
-  .counter small{display:block;font-size:1rem;font-weight:400;opacity:.85}
-  .tools{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
-  .tools button{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:10px;padding:8px 12px;font-size:.8rem}
-  .main{padding:32px 36px}
-  .main h1{font-size:2.2rem}
-  .main .sub{color:var(--muted);margin-bottom:24px}
-  .stats{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
-  .stat{background:#fff;border-radius:16px;padding:16px 20px;min-width:170px;box-shadow:0 4px 18px rgba(0,0,0,.05)}
-  .stat b{display:block;font-size:2.2rem;color:var(--red)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-  .group{background:#fff;border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.06);border-top:6px solid var(--cedar);animation:pop .45s ease}
-  .group.solo{border-top-color:var(--line);opacity:.7}
-  .group h3{font-size:1.15rem}
-  .group .when{color:var(--muted);font-size:.9rem;margin-bottom:10px}
-  .group .badge{display:inline-block;background:var(--red);color:#fff;border-radius:999px;padding:3px 10px;font-size:.8rem;font-weight:600;margin-top:10px}
-  .empty{color:var(--muted);font-size:1.2rem;padding:40px 0}
-  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-  @media (max-width:800px){.screen{grid-template-columns:1fr}}
-  .modebar{position:fixed;bottom:0;left:0;right:0;background:#fff3cd;color:#7a5b00;font-size:.75rem;text-align:center;padding:4px;z-index:50}
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);height:calc(var(--tab-h) + env(safe-area-inset-bottom))}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.72rem;font-weight:600;color:#9aa1ab;position:relative}
+.tab svg{width:24px;height:24px}
+.tab.on{color:var(--cedar)}
+.tab .badge{position:absolute;top:8px;left:calc(50% + 6px);background:var(--red);color:#fff;font-size:.65rem;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 5px}
 
-  /* ---------- screen tabs / kiosk ---------- */
-  .tabbar{display:flex;gap:10px;margin-bottom:22px}
-  .tabbar button{background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 18px;font-weight:700;color:var(--muted)}
-  .tabbar button.on{border-color:var(--cedar);color:var(--cedar);background:#eaf6ef}
-  .kiosk{max-width:520px}
+h1.title{font-size:1.55rem;line-height:1.2;letter-spacing:-.02em;margin:6px 0 2px}
+h2.section{font-size:1rem;margin:22px 2px 10px;display:flex;align-items:center;justify-content:space-between}
+h2.section .link{font-size:.82rem}
+.link{color:var(--cedar);font-weight:600}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.stack>*+*{margin-top:10px}
+
+/* search card */
+.search{margin-top:14px;padding:6px 16px}
+.search .row{display:flex;align-items:center;gap:12px;padding:12px 0;width:100%;text-align:left}
+.search .row+.row{border-top:1px solid var(--line)}
+.search .dot{width:12px;height:12px;border-radius:50%;border:3px solid var(--cedar);flex-shrink:0}
+.search .dot.end{background:var(--red);border-color:var(--red)}
+.search .lbl{font-size:.72rem;color:var(--muted);font-weight:500}
+.search .val{font-weight:700}
+.search .chev{margin-left:auto;color:#b6bcc4}
+.chiprow{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:none;margin:0 -18px;padding-left:18px;padding-right:18px}
+.chiprow::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;border:2px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;font-size:.88rem;white-space:nowrap}
+.chip.on{background:var(--cedar);border-color:var(--cedar);color:#fff}
+.chip.lock{color:var(--muted)}
+.toggles{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+
+/* ride card */
+.ride{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;background:#fff;border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);transition:transform .12s}
+.ride:active{transform:scale(.98)}
+.ride .time{font-size:1.25rem;font-weight:800;color:var(--cedar-dark);line-height:1}
+.ride .time small{display:block;font-size:.68rem;font-weight:500;color:var(--muted);margin-top:4px}
+.ride .who{display:flex;align-items:center;gap:8px;font-weight:700}
+.ride .route{font-size:.82rem;color:var(--muted);margin-top:2px}
+.ride .note{font-size:.78rem;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.ride .rside{text-align:right}
+.seatdots{display:flex;gap:3px;justify-content:flex-end}
+.seatdots i{width:10px;height:10px;border-radius:3px;background:var(--cedar)}
+.seatdots i.free{background:#fff;border:2px solid var(--cedar)}
+.status{display:inline-block;margin-top:6px;font-size:.72rem;font-weight:700;border-radius:999px;padding:3px 9px}
+.status.ok{background:var(--cedar-soft);color:var(--cedar-dark)}
+.status.full{background:#f1f1f1;color:var(--muted)}
+.status.mine{background:var(--red-soft);color:var(--red)}
+.tagv{display:inline-flex;align-items:center;font-size:.66rem;font-weight:700;color:var(--cedar);background:var(--cedar-soft);border-radius:6px;padding:1px 6px}
+
+.av{width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-weight:700;font-size:.78rem;flex-shrink:0;position:relative}
+.av.lg{width:64px;height:64px;font-size:1.4rem}
+.av.md{width:40px;height:40px;font-size:.95rem}
+.av.star::after{content:"⭐";position:absolute;right:-5px;bottom:-4px;font-size:.62rem}
+.av.lg.star::after{font-size:1rem;right:-3px;bottom:-2px}
+.avstack{display:flex}
+.avstack .av{width:24px;height:24px;font-size:.62rem;border:2px solid #fff;margin-left:-6px}
+.avstack .av:first-child{margin-left:0}
+
+/* empty / info */
+.empty{text-align:center;padding:26px 18px}
+.empty .big{font-size:2.4rem;margin-bottom:6px}
+.empty h3{font-size:1.05rem}
+.empty p{color:var(--muted);font-size:.9rem;margin:4px 0 14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:14px;padding:13px 18px;font-weight:700;font-size:.98rem}
+.btn.block{display:flex;width:100%}
+.btn.primary{background:var(--red);color:#fff}
+.btn.green{background:var(--cedar);color:#fff}
+.btn.soft{background:var(--cedar-soft);color:var(--cedar-dark)}
+.btn.line{background:#fff;border:2px solid var(--line);color:var(--ink)}
+.btn.danger{background:#fff;border:2px solid var(--red);color:var(--red)}
+.btn:disabled{opacity:.45}
+.btn:active{transform:scale(.98)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.waiting{display:flex;gap:12px;align-items:center;background:#fff8e8;border:1px solid #f6dfa8;border-radius:var(--radius);padding:14px}
+.waiting .ico{font-size:1.5rem}
+.waiting b{display:block}
+.req{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
+.req .info{flex:1}
+.req .info b{display:block;font-size:.92rem}
+
+/* forms */
+.field{margin-bottom:18px}
+.field>label{display:block;font-weight:700;margin-bottom:8px}
+.text{width:100%;padding:14px;border-radius:14px;border:2px solid var(--line);background:#fff}
+.text:focus{outline:none;border-color:var(--cedar)}
+.pick{display:flex;align-items:center;gap:10px;width:100%;padding:14px;border-radius:14px;border:2px solid var(--line);background:#fff;text-align:left}
+.pick .chev{margin-left:auto;color:#b6bcc4}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid3 .chip{text-align:center}
+.stepper{display:flex;align-items:center;gap:14px}
+.stepper button{width:44px;height:44px;border-radius:50%;border:2px solid var(--cedar);color:var(--cedar);font-size:1.4rem;font-weight:700;display:grid;place-items:center}
+.stepper button:disabled{opacity:.3}
+.stepper .n{font-size:1.6rem;font-weight:800;min-width:30px;text-align:center}
+.lockrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border-radius:14px;padding:13px 14px;border:2px dashed #f2c3c7}
+.lockrow .t{flex:1}
+.lockrow .t b{display:block;font-size:.92rem}
+.lockrow .t span{font-size:.78rem;color:var(--muted)}
+.switch{width:46px;height:28px;border-radius:14px;background:#d9dde2;position:relative;flex-shrink:0;transition:background .2s}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--cedar)}
+.switch.on::after{left:21px}
+.lockrow.unlocked{border:2px solid var(--line)}
+.hint{display:flex;gap:10px;align-items:center;background:var(--red-soft);color:#9b1c27;border-radius:14px;padding:12px 14px;font-size:.88rem;font-weight:600;margin-bottom:18px}
+
+/* onboarding */
+.onb{min-height:100dvh;display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top)) 22px calc(22px + env(safe-area-inset-bottom))}
+.onb .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin:16px 0 26px}
+.onb .bar i{display:block;height:100%;background:var(--cedar);transition:width .3s}
+.onb h1{font-size:1.65rem;line-height:1.2;letter-spacing:-.02em}
+.onb p.sub{color:var(--muted);margin:6px 0 20px}
+.onb .body{flex:1}
+.onb .foot{display:flex;gap:10px;margin-top:18px}
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.hero .art{font-size:4rem;margin-bottom:10px}
+.hero h1{font-size:2rem}
+.hero p{color:var(--muted);margin:10px auto 0;max-width:320px}
+.zonelist{display:grid;gap:8px}
+.zone{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:#fff}
+.zone b{display:block}
+.zone span{font-size:.78rem;color:var(--muted)}
+.zone.on{border-color:var(--cedar);background:var(--cedar-soft)}
+.zone .ck{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex-shrink:0}
+.zone.on .ck{background:var(--cedar);border-color:var(--cedar);box-shadow:inset 0 0 0 3px #fff}
+.bigchoice{display:grid;gap:12px}
+.bigchoice button{display:flex;align-items:center;gap:14px;text-align:left;padding:18px;border-radius:18px;border:2px solid var(--line);background:#fff}
+.bigchoice button .e{font-size:2rem}
+.bigchoice button b{display:block;font-size:1.05rem}
+.bigchoice button span{font-size:.85rem;color:var(--muted)}
+.bigchoice button.on{border-color:var(--cedar);background:var(--cedar-soft)}
+
+/* ride detail */
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--muted);margin:4px 0 12px}
+.timeline{position:relative;padding-left:26px}
+.timeline .stop{position:relative;padding-bottom:18px}
+.timeline .stop:last-child{padding-bottom:0}
+.timeline .stop::before{content:"";position:absolute;left:-22px;top:6px;width:12px;height:12px;border-radius:50%;border:3px solid var(--cedar);background:#fff}
+.timeline .stop.end::before{background:var(--red);border-color:var(--red)}
+.timeline::before{content:"";position:absolute;left:9px;top:14px;bottom:14px;width:3px;background:var(--cedar-soft);border-radius:2px}
+.timeline .t{font-weight:800;font-size:1.05rem}
+.timeline .s{font-size:.82rem;color:var(--muted)}
+.person{display:flex;align-items:center;gap:12px;padding:10px 0}
+.person+.person{border-top:1px solid var(--line)}
+.person .n{flex:1;font-weight:600}
+.person .n small{display:block;font-weight:400;color:var(--muted);font-size:.78rem}
+.seatbig{display:flex;gap:8px;margin-top:8px}
+.seatbig i{width:38px;height:38px;border-radius:10px;background:var(--cedar);display:grid;place-items:center;font-style:normal;color:#fff;font-size:.9rem}
+.seatbig i.free{background:#fff;border:2px dashed var(--cedar);color:var(--cedar)}
+.actionbar{position:sticky;bottom:calc(var(--tab-h) + 10px + env(safe-area-inset-bottom));margin-top:16px;z-index:5}
+.fuel{display:flex;align-items:center;gap:10px;margin-top:10px}
+.fuel .text{width:110px;padding:10px}
+.fuel .res{font-weight:800;color:var(--cedar-dark)}
+
+/* chat */
+.msgs{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto;padding:4px 2px 10px}
+.bubble{max-width:80%;padding:8px 12px;border-radius:16px;background:#f2efe8;font-size:.9rem;align-self:flex-start}
+.bubble b{display:block;font-size:.7rem;color:var(--cedar-dark)}
+.bubble.me{align-self:flex-end;background:var(--cedar);color:#fff}
+.bubble.me b{color:#cdeedb}
+.bubble .tm{font-size:.62rem;opacity:.6;margin-left:6px}
+.composer{display:flex;gap:8px}
+.composer .text{padding:12px}
+.composer .btn{padding:0 16px}
+
+/* sheet / modal */
+.overlay{position:fixed;inset:0;background:rgba(15,23,30,.45);z-index:60;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.sheet{background:#fff;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:10px 20px calc(22px + env(safe-area-inset-bottom));max-height:88dvh;overflow-y:auto;animation:up .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes up{from{transform:translateY(100%)}}
+.sheet .grab{width:42px;height:5px;border-radius:3px;background:#dcdcdc;margin:0 auto 14px}
+.sheet h2{font-size:1.25rem;margin-bottom:4px}
+.plushead{background:linear-gradient(135deg,#e63946,#c81d2c);color:#fff;border-radius:18px;padding:18px;margin-bottom:14px}
+.plushead .price{font-size:2.2rem;font-weight:800;line-height:1.1;margin-top:6px}
+.plushead .price small{font-size:.9rem;font-weight:500;opacity:.85}
+.perk{display:flex;gap:12px;align-items:flex-start;padding:10px 0}
+.perk+.perk{border-top:1px solid var(--line)}
+.perk .e{font-size:1.3rem;width:30px;text-align:center}
+.perk b{display:block;font-size:.95rem}
+.perk span{font-size:.8rem;color:var(--muted)}
+.democ{font-size:.72rem;color:var(--muted);text-align:center;margin-top:10px}
+.burst{text-align:center;padding:20px 0 6px}
+.burst .e{font-size:3.4rem;animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+
+/* me */
+.profile{display:flex;gap:14px;align-items:center}
+.profile .n{font-size:1.25rem;font-weight:800}
+.menu{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.menu button{display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px;text-align:left;font-weight:600}
+.menu button+button{border-top:1px solid var(--line)}
+.menu button .chev{margin-left:auto;color:#b6bcc4}
+.menu button.red{color:var(--red)}
+.pluscard{background:linear-gradient(135deg,#e63946,#c81d2c);color:#fff;border-radius:var(--radius);padding:18px}
+.pluscard h3{font-size:1.1rem}
+.pluscard ul{list-style:none;margin:10px 0 14px;font-size:.88rem}
+.pluscard li{padding:3px 0}
+.pluscard .btn{background:#fff;color:var(--red)}
+.impact{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.impact .card{text-align:center;padding:14px}
+.impact b{display:block;font-size:1.6rem;color:var(--cedar-dark)}
+.impact span{font-size:.78rem;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(var(--tab-h) + 20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:600;font-size:.9rem;z-index:90;animation:toast 2.6s ease forwards;max-width:90vw;text-align:center}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,10px)}10%,85%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.splash{min-height:100dvh;display:grid;place-items:center;text-align:center;color:var(--muted)}
+.spinner{width:34px;height:34px;border:4px solid var(--cedar-soft);border-top-color:var(--cedar);border-radius:50%;animation:spin 1s linear infinite;margin:14px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modebar{position:fixed;left:10px;bottom:calc(var(--tab-h) + 10px + env(safe-area-inset-bottom));background:#fff3cd;color:#7a5b00;font-size:.68rem;font-weight:600;border-radius:999px;padding:3px 10px;z-index:25;pointer-events:none}
+.screen ~ .modebar{bottom:10px;left:auto;right:12px}
+
+/* ====================== BIG SCREEN ====================== */
+.screen{display:grid;grid-template-columns:clamp(260px,22vw,340px) 1fr;height:100vh;overflow:hidden}
+.side{background:var(--cedar);color:#fff;padding:clamp(18px,2.4vh,30px) clamp(18px,1.6vw,28px);display:flex;flex-direction:column;gap:clamp(12px,2vh,22px);overflow:hidden}
+.side .brand{color:#fff;font-size:1.5rem}
+.side .brand .logo{background:#fff}
+.side .scan{font-weight:700;font-size:1.05rem}
+.qrbox{background:#fff;border-radius:18px;padding:12px;display:grid;place-items:center;margin-top:8px}
+.qrbox img,.qrbox canvas{width:100%!important;height:auto!important;max-height:30vh;object-fit:contain}
+.side .url{font-size:.8rem;opacity:.85;word-break:break-all;margin-top:6px}
+.side .count{font-size:clamp(2.6rem,6vh,4rem);font-weight:800;line-height:1}
+.side .count small{display:block;font-size:.95rem;font-weight:500;opacity:.85}
+.conn{display:inline-flex;align-items:center;gap:7px;font-size:.82rem;font-weight:600;background:rgba(255,255,255,.14);border-radius:999px;padding:5px 12px;width:max-content}
+.conn i{width:9px;height:9px;border-radius:50%;background:#7CF0A8;box-shadow:0 0 0 0 rgba(124,240,168,.7);animation:pulse 1.8s infinite}
+.conn.off i{background:#f6c35b;animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(124,240,168,0)}100%{box-shadow:0 0 0 0 rgba(124,240,168,0)}}
+.tools{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px}
+.tools button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:10px;padding:7px 11px;font-size:.78rem;font-weight:600}
+.tools button.on{background:#fff;color:var(--cedar)}
+.main{padding:clamp(16px,2.4vh,28px) clamp(18px,2vw,34px);display:flex;flex-direction:column;gap:clamp(10px,1.8vh,18px);overflow:hidden;min-height:0}
+.mhead{display:flex;align-items:center;gap:16px}
+.mhead h1{font-size:clamp(1.4rem,2.6vw,2.1rem);letter-spacing:-.02em;line-height:1.1}
+.mhead .clock{margin-left:auto;font-weight:700;color:var(--muted);font-size:1.05rem}
+.stabs{display:flex;gap:8px}
+.stabs button{background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 14px;font-weight:700;color:var(--muted);font-size:.9rem}
+.stabs button.on{border-color:var(--cedar);color:var(--cedar);background:var(--cedar-soft)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(8px,1vw,14px)}
+.stat{background:#fff;border-radius:16px;padding:clamp(10px,1.5vh,16px) clamp(12px,1vw,18px);box-shadow:var(--shadow)}
+.stat b{display:block;font-size:clamp(1.6rem,4.2vh,2.5rem);line-height:1.1;color:var(--cedar-dark)}
+.stat.red b{color:var(--red)}
+.stat span{font-size:clamp(.72rem,1.5vh,.88rem);color:var(--muted);font-weight:500}
+.stat b.bump{animation:bump .5s ease}
+@keyframes bump{40%{transform:scale(1.18);color:var(--red)}}
+.board{display:grid;grid-template-columns:1.45fr 1fr;gap:clamp(10px,1.2vw,18px);flex:1;min-height:0}
+.panel{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:clamp(12px,1.8vh,18px);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.panel h2{font-size:clamp(.95rem,1.9vh,1.1rem);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.panel h2 .n{margin-left:auto;font-size:.8rem;color:var(--muted);font-weight:600}
+.deps{overflow:hidden;flex:1}
+.dep{display:grid;grid-template-columns:clamp(54px,5vw,74px) 1.2fr 1.1fr 1fr auto;gap:12px;align-items:center;padding:clamp(7px,1.2vh,11px) 6px;border-top:1px solid var(--line)}
+.dep.head{border-top:none;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;padding-top:0}
+.dep .tm{font-size:clamp(1.05rem,2.4vh,1.35rem);font-weight:800;color:var(--cedar-dark);font-variant-numeric:tabular-nums}
+.dep .fr b{display:block;font-size:.92rem}
+.dep .fr span{font-size:.72rem;color:var(--muted)}
+.dep .dr{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;min-width:0}
+.dep .dr span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dep.flash{animation:flash 1.4s ease}
+@keyframes flash{0%{background:#fff2b8}100%{background:transparent}}
+.dep .st{text-align:right}
+.mapwrap{flex:1;min-height:0;display:flex}
+.mapwrap svg{width:100%;height:100%}
+.flow{stroke-dasharray:6 7;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-26}}
+.waitlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;max-height:16vh;overflow:hidden}
+.wchip{display:inline-flex;align-items:center;gap:6px;background:#fff8e8;border:1px solid #f6dfa8;border-radius:999px;padding:4px 10px;font-size:.78rem;font-weight:600}
+.ticker{display:flex;gap:10px;overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.tick{display:inline-flex;align-items:center;gap:8px;background:#fff;border-radius:999px;padding:7px 14px;box-shadow:var(--shadow);font-size:.85rem;font-weight:500;animation:enter .4s ease;flex-shrink:0}
+.tick .ago{color:var(--muted);font-size:.72rem}
+.kioskwrap{flex:1;display:flex;gap:40px;align-items:center;justify-content:center;min-height:0}
+.device{height:min(calc(100% - 8px),760px);aspect-ratio:9/18.5;background:#111;border-radius:42px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.device iframe{width:100%;height:100%;border:0;border-radius:32px;background:var(--cream)}
+.kinfo{max-width:340px}
+.kinfo h2{font-size:1.7rem;line-height:1.2;margin-bottom:10px}
+.kinfo li{margin:10px 0;list-style:none;display:flex;gap:10px;font-weight:500}
+.kinfo li b{background:var(--cedar);color:#fff;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;flex-shrink:0;font-size:.85rem}
+.sempty{flex:1;display:grid;place-items:center;text-align:center;color:var(--muted)}
+.sempty .big{font-size:2.6rem}
 </style>
 </head>
 <body>
-
-<!-- ======================= PHONE VIEW ======================= -->
-<div id="phoneView" class="phone hidden">
-  <header>
-    <div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
-    <p class="tag">Find classmates going your way to USJ.</p>
-  </header>
-  <div id="widget-"></div>
-</div>
-
-<!-- ======================= BIG SCREEN VIEW ======================= -->
-<div id="screenView" class="screen hidden">
-  <aside class="side">
-    <div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
-    <div>
-      <div style="font-weight:600;margin-bottom:10px">📱 Scan to join</div>
-      <div class="qrbox" id="qr"></div>
-      <p class="url" id="joinUrl"></p>
-    </div>
-    <div class="counter"><span id="count">0</span><small>classmates joined</small></div>
-    <div class="tools">
-      <button id="fake">+ Add fake classmate</button>
-      <button id="reset">Reset all</button>
-    </div>
-  </aside>
-  <main class="main">
-    <div class="tabbar">
-      <button id="tabDash" class="on">🗺️ Live dashboard</button>
-      <button id="tabKiosk">🙋 Join a ride (no phone needed)</button>
-    </div>
-
-    <div id="dashPane">
-      <h1>Who can ride together? 🇱🇧</h1>
-      <p class="sub">Same area + same time = one car instead of many.</p>
-      <div class="stats">
-        <div class="stat"><b id="sGroups">0</b>ride groups found</div>
-        <div class="stat"><b id="sCars">0</b>cars off the road</div>
-        <div class="stat"><b id="sSave">0%</b>average fuel saved</div>
-      <div class="stat"><b id="sPlus">0</b>⭐ Plus members</div>
-      </div>
-      <div id="groups" class="grid"></div>
-    </div>
-
-    <div id="kioskPane" class="hidden kiosk">
-      <h1 style="margin-bottom:14px">Join a ride from this screen</h1>
-      <div id="widget-k-"></div>
-    </div>
-  </main>
-</div>
-
-<div id="modebar" class="modebar hidden">Demo mode (no Firebase yet): works across tabs on this one computer only.</div>
+<div id="root"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script>
+"use strict";
 /* =========================================================
-   1) PASTE YOUR FIREBASE CONFIG HERE (see README.md)
+   CONFIG
    ========================================================= */
 const firebaseConfig = {
   apiKey: "AIzaSyAzUwUj9AGJtOnEnTbRi3FiljKMKhGG6Co",
@@ -178,426 +334,753 @@ const firebaseConfig = {
   messagingSenderId: "148982376204",
   appId: "1:148982376204:web:98306b81b2d832320bcb29"
 };
-
-/* =========================================================
-   2) DATA: areas, times, seat counts
-   ========================================================= */
 const ZONES = [
-  { id:"metn-coast", name:"Metn Coast",   towns:"Jdeideh, Zalka, Antelias, Dbayeh" },
-  { id:"upper-metn", name:"Upper Metn",   towns:"Broummana, Bikfaya, Beit Mery, Dik El Mehdi" },
-  { id:"beirut",     name:"Beirut",       towns:"Achrafieh, Hamra, Badaro" },
-  { id:"baabda",     name:"Baabda",       towns:"Hazmieh, Hadath, Furn el Chebbak" },
-  { id:"keserwan",   name:"Keserwan",     towns:"Jounieh, Kaslik, Zouk" },
-  { id:"jbeil",      name:"Jbeil & North",towns:"Byblos, Batroun, Amchit" },
-  { id:"south",      name:"South & Chouf",towns:"Aley, Damour, Jezzine" },
-  { id:"dekwaneh",   name:"Near campus",  towns:"Dekwaneh, Sin el Fil, Mar Roukoz" }
+  { id:"metn-coast", name:"Metn Coast",    towns:"Jdeideh, Zalka, Antelias, Dbayeh" },
+  { id:"upper-metn", name:"Upper Metn",    towns:"Broummana, Bikfaya, Beit Mery, Dik El Mehdi" },
+  { id:"beirut",     name:"Beirut",        towns:"Achrafieh, Hamra, Badaro" },
+  { id:"baabda",     name:"Baabda",        towns:"Hazmieh, Hadath, Furn el Chebbak" },
+  { id:"keserwan",   name:"Keserwan",      towns:"Jounieh, Kaslik, Zouk" },
+  { id:"jbeil",      name:"Jbeil & North", towns:"Byblos, Batroun, Amchit" },
+  { id:"south",      name:"South & Chouf", towns:"Aley, Damour, Jezzine" },
+  { id:"dekwaneh",   name:"Near campus",   towns:"Dekwaneh, Sin el Fil, Mar Roukoz" }
 ];
 const TIMES = ["7:00","7:30","8:00","8:30","9:00","9:30","10:00","10:30","11:00"];
-const CARS  = [{id:"yes",name:"Yes, I drive 🚗"},{id:"no",name:"No, I need a ride"}];
-const SEATS = [1,2,3,4];
-const zoneName = id => (ZONES.find(z=>z.id===id)||{}).name || id;
-const groupKey = (zone,time) => zone+"__"+time;
+const DEST = "USJ campus";
+const PRICE = "$2/month";
+
+const qs = new URLSearchParams(location.search);
+const MODE = qs.has("screen") ? "screen" : "app";
+const KIOSK = qs.has("kiosk");
+const AS = (qs.get("as") || "").replace(/[^a-z0-9]/gi,"").slice(0,20);
+const UID_KEY = AS ? "sadik2-uid-"+AS : KIOSK ? "sadik2-kiosk-uid" : "sadik2-uid";
+const LIVE = !firebaseConfig.apiKey.startsWith("PASTE") && !qs.has("demo");
 
 /* =========================================================
-   3) RIDERS STORE: Firebase if configured, otherwise local demo mode
+   HELPERS
    ========================================================= */
-const LIVE = !firebaseConfig.apiKey.startsWith("PASTE");
-let riderListeners = [];
-const Store = (() => {
-  if (LIVE) {
-    firebase.initializeApp(firebaseConfig);
-    const ref = firebase.database().ref("riders");
-    ref.on("value", s => { const v=s.val()||{}; const list=Object.entries(v).map(([id,r])=>({...r,id})); riderListeners.forEach(f=>f(list)); });
-    return {
-      add: r => ref.push(r).key,
-      update: (id,r) => ref.child(id).set(r),
-      reset: () => ref.remove(),
-    };
-  }
-  // demo mode: localStorage, synced between tabs
-  const KEY="sadik-demo";
-  const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}};
-  const write=v=>{localStorage.setItem(KEY,JSON.stringify(v)); emit();};
-  const emit=()=>{const v=read(); const list=Object.entries(v).map(([id,r])=>({...r,id})); riderListeners.forEach(f=>f(list));};
-  window.addEventListener("storage",e=>{if(e.key===KEY)emit();});
-  setTimeout(emit,0);
-  return {
-    add: r => { const v=read(); const id="r"+Date.now()+Math.random().toString(36).slice(2,6); v[id]=r; write(v); return id; },
-    update: (id,r) => { const v=read(); v[id]=r; write(v); },
-    reset: () => write({}),
-  };
-})();
-const onRiders = f => riderListeners.push(f);
-if (!LIVE) document.getElementById("modebar").classList.remove("hidden");
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const zone = id => ZONES.find(z => z.id === id) || { id, name:id, towns:"" };
+const tmin = t => { const [h,m] = String(t).split(":").map(Number); return h*60 + (m||0); };
+const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const plural = (n, w, p) => `${n} ${n===1 ? w : (p || w+"s")}`;
+const AV_COLORS = ["#0f7b4a","#e63946","#2a6f97","#f4a72a","#7b4ea3","#0a5534","#d65a31","#3d8b7d"];
+const avColor = s => { let h=0; for (const c of String(s)) h = (h*31 + c.charCodeAt(0)) >>> 0; return AV_COLORS[h % AV_COLORS.length]; };
+const initials = n => String(n||"?").trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+function ago(t){ const s = Math.max(0, (Date.now()-t)/1000|0); if (s<45) return "just now"; if (s<3600) return Math.round(s/60)+"m ago"; return Math.round(s/3600)+"h ago"; }
+function setHTML(el, html){ if (el && el._h !== html){ el.innerHTML = html; el._h = html; } }
 
-/* =========================================================
-   3b) CHAT STORE: one small thread per ride group (zone+time)
-   ========================================================= */
-const ChatStore = (() => {
-  if (LIVE) {
-    const ref = firebase.database().ref("chats");
-    let full = {};
-    const cbs = [];
-    ref.on("value", s => { full = s.val()||{}; cbs.forEach(f=>f(full)); });
-    return {
-      send:(gk,msg) => ref.child(gk).push(msg),
-      onChange:(f) => { cbs.push(f); f(full); },
-    };
-  }
-  const KEY="sadik-chats-demo";
-  const read=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}};
-  const write=v=>{localStorage.setItem(KEY,JSON.stringify(v)); emit();};
-  const cbs=[];
-  const emit=()=>{const v=read(); cbs.forEach(f=>f(v));};
-  window.addEventListener("storage",e=>{if(e.key===KEY)emit();});
-  return {
-    send:(gk,msg)=>{ const v=read(); v[gk]=v[gk]||{}; const id="m"+Date.now()+Math.random().toString(36).slice(2,6); v[gk][id]=msg; write(v); },
-    onChange:(f)=>{ cbs.push(f); setTimeout(()=>f(read()),0); },
-  };
-})();
-
-/* =========================================================
-   4) MATCHING: same zone + same time
-   ========================================================= */
-function groupRiders(list){
-  const map={};
-  list.forEach(r=>{ const k=groupKey(r.zone,r.time); (map[k]=map[k]||{zone:r.zone,time:r.time,people:[]}).people.push(r); });
-  return Object.values(map).sort((a,b)=>b.people.length-a.people.length || a.time.localeCompare(b.time));
-}
-const savedPct = n => n>1 ? Math.round((1-1/n)*100) : 0;
-const seatInfo = people => {
-  const drivers=people.filter(p=>p.car==="yes");
-  const seatTotal=drivers.reduce((s,p)=>s+(parseInt(p.seats,10)||0),0);
-  const passengers=people.filter(p=>p.car==="no").length;
-  return {drivers:drivers.length, seatTotal, passengers};
+const ICON = {
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
+  car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v2M19 17v2M4 13l2-5.5A2 2 0 0 1 7.9 6h8.2a2 2 0 0 1 1.9 1.5L20 13v4H4z"/><circle cx="7.5" cy="14" r=".6"/><circle cx="16.5" cy="14" r=".6"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+  chev:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg>',
+  back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg>',
 };
 
 /* =========================================================
-   5) RIDE WIDGET (form + my ride + browse/join + chat)
-      Reusable: used for the phone view AND the screen's kiosk tab.
-      `prefix` picks which set of element ids to use ("" or "k-"),
-      `nsKey` keeps each widget's "who am I" identity separate.
+   DATABASE (Firebase live, or local demo across tabs)
+   All data lives under v2/: users, rides, requests, chats, feed
    ========================================================= */
-function initRideWidget(prefix, nsKey, container){
-  container.innerHTML = `
-    <div id="${prefix}form">
-      <div class="card">
-        <label class="q">1. Your first name</label>
-        <input id="${prefix}name" type="text" maxlength="16" placeholder="e.g. Edwin" autocomplete="off">
-      </div>
-      <div class="card">
-        <label class="q">2. Where do you come from?</label>
-        <div id="${prefix}zones" class="chips zones"></div>
-      </div>
-      <div class="card">
-        <label class="q">3. When do you leave in the morning?</label>
-        <div id="${prefix}times" class="chips times"></div>
-      </div>
-      <div class="card">
-        <label class="q">4. Do you have a car?</label>
-        <div id="${prefix}cars" class="chips"></div>
-        <div id="${prefix}seatsWrap" class="seatsWrap hidden">
-          <label class="q">How many free seats (besides you)?</label>
-          <div id="${prefix}seats" class="chips"></div>
-        </div>
-      </div>
-      <button id="${prefix}go" class="go" disabled>Yalla, find my Sadik! 🚗</button>
-    </div>
-
-    <div id="${prefix}result" class="hidden">
-      <div class="card result">
-        <h2 id="${prefix}resTitle">My ride</h2>
-        <div class="big" id="${prefix}resCount">0</div>
-        <p id="${prefix}resText" class="tag"></p>
-        <div id="${prefix}resPeople" class="people"></div>
-        <div id="${prefix}resSave" class="save"></div>
-        <button id="${prefix}plusBtn" class="plusBtn">⭐ Get Sadik Plus · $2/month</button>
-        <div id="${prefix}chatWrap" class="hidden">
-          <button id="${prefix}chatToggle" class="chatBtn">💬 Open group chat</button>
-          <div id="${prefix}chatPanel" class="chatPanel hidden">
-            <div id="${prefix}chatMsgs" class="chatMsgs"></div>
-            <div class="chatRow">
-              <input id="${prefix}chatInput" type="text" maxlength="200" placeholder="Message your ride group…">
-              <button id="${prefix}chatSend">Send</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h3 class="browseTitle">Or join another ride 👇</h3>
-      <div id="${prefix}browseList"></div>
-
-      <p class="tag" style="text-align:center">This updates live as classmates join 👀</p>
-      <div style="text-align:center"><button class="link" id="${prefix}again">Change my answers</button></div>
-    </div>
-  `;
-
-  const $=id=>document.getElementById(prefix+id);
-  const sel={zone:null,time:null,car:null,seats:null};
-  const makeChips=(el,items,key,html,after)=>{
-    items.forEach(it=>{
-      const b=document.createElement("button"); b.className="chip"; b.innerHTML=html(it);
-      b.onclick=()=>{ el.querySelectorAll(".chip").forEach(c=>c.classList.remove("on")); b.classList.add("on"); sel[key]=(it&&it.id!==undefined)?it.id:it; check(); if(after) after(); };
-      el.appendChild(b);
-    });
+function liveDB(){
+  firebase.initializeApp(firebaseConfig);
+  const root = firebase.database().ref("v2");
+  return {
+    on: f => root.on("value", s => f(s.val() || {})),
+    set: (p,v) => root.child(p).set(v),
+    update: (p,o) => root.child(p).update(o),
+    push: (p,v) => { const r = root.child(p).push(); r.set(v); return r.key; },
+    remove: p => root.child(p).remove(),
+    reset: () => root.remove(),
+    // Atomic seat booking: never lets a car go over its seat count.
+    join: (rid, uid) => root.child("rides/"+rid).transaction(r => {
+      if (r === null) return null;
+      const ps = r.passengers || {};
+      if (ps[uid]) return r;
+      if (Object.keys(ps).length >= r.seats) return;   // abort: full
+      ps[uid] = { at: Date.now() }; r.passengers = ps; return r;
+    }).then(res => { const v = res.snapshot.val(); return !!(res.committed && v && v.passengers && v.passengers[uid]); }),
+    onConn: f => firebase.database().ref(".info/connected").on("value", s => f(!!s.val())),
   };
-  makeChips($("zones"),ZONES,"zone",z=>`${z.name}<small>${z.towns}</small>`);
-  makeChips($("times"),TIMES,"time",t=>t);
-  makeChips($("cars"),CARS,"car",c=>c.name, ()=>{
-    const showSeats = sel.car==="yes";
-    $("seatsWrap").classList.toggle("hidden",!showSeats);
-    if(!showSeats){ sel.seats=null; }
-  });
-  makeChips($("seats"),SEATS,"seats",n=>`${n}`);
-  const check=()=>{
-    const needSeats = sel.car==="yes" ? !!sel.seats : true;
-    $("go").disabled=!($("name").value.trim()&&sel.zone&&sel.time&&sel.car&&needSeats);
-  };
-  $("name").addEventListener("input",check);
-
-  let myId=localStorage.getItem(nsKey);
-  let chatOpen=false;
-  let chatGroupKey=null;
-  let allChats={};
-  ChatStore.onChange(c=>{ allChats=c; renderChat(); });
-
-  $("go").onclick=()=>{
-    const r={name:$("name").value.trim().slice(0,16),zone:sel.zone,time:sel.time,car:sel.car,seats:sel.car==="yes"?sel.seats:0,at:Date.now()};
-    if(myId) Store.update(myId,r); else { myId=Store.add(r); localStorage.setItem(nsKey,myId); }
-    if(!last.find(x=>x.id===myId)) last=[...last,{...r,id:myId}];
-    else last=last.map(x=>x.id===myId?{...r,id:myId}:x);
-    render(); show(true);
-  };
-  $("again").onclick=()=>show(false);
-  const show=res=>{$("form").classList.toggle("hidden",res);$("result").classList.toggle("hidden",!res);};
-
-  let last=[];
-  onRiders(list=>{ last=list; render(); });
-
-  function render(){
-    const me=last.find(r=>r.id===myId);
-    if(!me){ return; }
-    const mates=last.filter(r=>r.zone===me.zone&&r.time===me.time);
-    const others=mates.filter(r=>r.id!==myId);
-    const info=seatInfo(mates);
-    $("resCount").textContent=others.length;
-    $("resTitle").textContent=`${zoneName(me.zone)} · ${me.time}`;
-    $("resText").textContent= others.length ? `classmate${others.length>1?"s":""} leave from your area at the same time!` : "No match yet… wait a few seconds 👀";
-    $("resPeople").innerHTML=mates.map(r=>`<span class="person ${r.car==="yes"?"car":""} ${r.plus?"plus":""}">${esc(r.name)}${r.car==="yes"&&r.seats?` (${r.seats} seat${r.seats>1?"s":""})`:""}${r.id===myId?" (you)":""}</span>`).join("");
-    if(others.length){
-      if(info.drivers===0){
-        $("resSave").innerHTML = `Nobody drives yet. Ask a friend with a car to join and you're all set!`;
-      } else if(info.seatTotal>=info.passengers){
-        $("resSave").innerHTML = `🚗 ${info.drivers} driver${info.drivers>1?"s":""}, ${info.seatTotal} seat${info.seatTotal>1?"s":""} — enough for everyone! Split the fuel ${mates.length} ways and save about <b>${savedPct(mates.length)}%</b>.`;
-      } else {
-        $("resSave").innerHTML = `🚗 ${info.drivers} driver${info.drivers>1?"s":""} offering ${info.seatTotal} seat${info.seatTotal!==1?"s":""}, but ${info.passengers} need a ride. ${info.passengers-info.seatTotal} more seat${info.passengers-info.seatTotal>1?"s":""} needed.`;
-      }
-      $("chatWrap").classList.remove("hidden");
-      chatGroupKey=groupKey(me.zone,me.time);
-      renderChat();
-    } else {
-      $("resSave").innerHTML = `Share the link with friends from ${zoneName(me.zone)}! <button id="${prefix}shareBtn" class="shareBtn">📤 Share Sadik</button>`;
-      const btn=$("shareBtn");
-      if(btn) btn.onclick=()=>shareApp(zoneName(me.zone));
-      $("chatWrap").classList.add("hidden");
-      chatGroupKey=null;
-    }
-    renderBrowseList(me);
-    renderPlus();
-  }
-
-  function renderBrowseList(me){
-    const groups=groupRiders(last);
-    const other=groups.filter(g=>!(g.zone===me.zone&&g.time===me.time));
-    const el=$("browseList");
-    if(!other.length){ el.innerHTML=`<div class="noRides">No other rides posted yet — check back soon, or share Sadik with classmates!</div>`; return; }
-    el.innerHTML=other.map(g=>{
-      const info=seatInfo(g.people);
-      const names=g.people.map(p=>p.name).join(", ");
-      const seatTxt = info.drivers ? ` · ${info.seatTotal} seat${info.seatTotal!==1?"s":""} free` : " · no driver yet";
-      return `<div class="rideRow">
-        <div class="info"><b>📍 ${zoneName(g.zone)} · ${g.time}</b><span>${names}${seatTxt}</span></div>
-        <button class="joinBtn" data-zone="${g.zone}" data-time="${g.time}">Join</button>
-      </div>`;
-    }).join("");
-    el.querySelectorAll(".joinBtn").forEach(b=>{
-      b.onclick=()=>joinGroup(b.dataset.zone,b.dataset.time);
-    });
-  }
-
-  function joinGroup(zone,time){
-    const me=last.find(r=>r.id===myId); if(!me) return;
-    const r={...me,zone,time};
-    delete r.id;
-    Store.update(myId,r);
-    last=last.map(x=>x.id===myId?{...r,id:myId}:x);
-    render();
-    container.scrollIntoView({behavior:"smooth",block:"start"});
-  }
-
-  function renderChat(){
-    if(!chatGroupKey) return;
-    const panel=$("chatPanel");
-    if(panel.classList.contains("hidden")) return;
-    const msgs=allChats[chatGroupKey]||{};
-    const list=Object.values(msgs).sort((a,b)=>a.at-b.at);
-    $("chatMsgs").innerHTML = list.length
-      ? list.map(m=>`<div class="chatMsg"><b>${esc(m.name)}:</b> ${esc(m.text)}</div>`).join("")
-      : `<div class="noRides" style="padding:6px 0">Say hi to your ride group 👋</div>`;
-    $("chatMsgs").scrollTop = $("chatMsgs").scrollHeight;
-  }
-
-  const chatToggleBtn=$("chatToggle");
-  if(chatToggleBtn) chatToggleBtn.onclick=()=>{
-    chatOpen=!chatOpen;
-    $("chatPanel").classList.toggle("hidden",!chatOpen);
-    chatToggleBtn.textContent = chatOpen ? "💬 Hide group chat" : "💬 Open group chat";
-    if(chatOpen) renderChat();
-  };
-  const sendChat=()=>{
-    const input=$("chatInput");
-    const text=input.value.trim();
-    const me=last.find(r=>r.id===myId);
-    if(!text||!chatGroupKey||!me) return;
-    ChatStore.send(chatGroupKey,{name:me.name,text:text.slice(0,200),at:Date.now()});
-    input.value="";
-  };
-  const chatSendBtn=$("chatSend");
-  if(chatSendBtn){
-    chatSendBtn.onclick=sendChat;
-    $("chatInput").addEventListener("keydown",e=>{ if(e.key==="Enter") sendChat(); });
-  }
-
-  function renderPlus(){
-    const me=last.find(r=>r.id===myId), b=$("plusBtn");
-    if(!me||!b) return;
-    b.textContent = me.plus ? "⭐ You're a Sadik Plus member" : "⭐ Get Sadik Plus · $2/month";
-    b.classList.toggle("owned", !!me.plus);
-  }
-  $("plusBtn").onclick=()=>{
-    const me=last.find(r=>r.id===myId); if(!me||me.plus) return;
-    openPlus(()=>{
-      const r={...me,plus:true}; delete r.id;
-      Store.update(myId,r);
-      last=last.map(x=>x.id===myId?{...r,id:myId}:x);
-      render();
-    });
-  };
-
-  async function shareApp(zone){
-    const url=location.href.split("?")[0];
-    const text=`Join me on Sadik to find a ride from ${zone} to USJ! 🚗`;
-    if(navigator.share){
-      try{ await navigator.share({title:"Sadik",text,url}); return; }catch(e){ /* user cancelled or unsupported, fall through */ }
-    }
-    try{
-      await navigator.clipboard.writeText(`${text} ${url}`);
-      const btn=$("shareBtn");
-      if(btn){ const old=btn.textContent; btn.textContent="✅ Link copied!"; setTimeout(()=>btn.textContent=old,1800); }
-    }catch(e){
-      prompt("Copy this link:", url);
-    }
-  }
-
-  if(myId) show(true);
 }
+function demoDB(){
+  const KEY = "sadik2-demo";
+  const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } };
+  const cbs = [];
+  const emit = () => { const t = read(); cbs.forEach(f => f(t)); };
+  const write = t => { localStorage.setItem(KEY, JSON.stringify(t)); emit(); };
+  const parts = p => String(p).split("/").filter(Boolean);
+  const setIn = (t,p,v) => { const ks = parts(p); let o = t; for (let i=0;i<ks.length-1;i++){ if (!o[ks[i]] || typeof o[ks[i]] !== "object") o[ks[i]] = {}; o = o[ks[i]]; } const k = ks[ks.length-1]; if (v === null || v === undefined) delete o[k]; else o[k] = v; };
+  const getIn = (t,p) => parts(p).reduce((o,k) => o && o[k], t);
+  window.addEventListener("storage", e => { if (e.key === KEY) emit(); });
+  const done = Promise.resolve();
+  return {
+    on: f => { cbs.push(f); setTimeout(() => f(read()), 0); },
+    set: (p,v) => { const t = read(); setIn(t,p,v); write(t); return done; },
+    update: (p,o) => { const t = read(); Object.entries(o).forEach(([k,v]) => setIn(t, p+"/"+k, v)); write(t); return done; },
+    push: (p,v) => { const id = "k"+newId(); const t = read(); setIn(t, p+"/"+id, v); write(t); return id; },
+    remove: p => { const t = read(); setIn(t,p,null); write(t); return done; },
+    reset: () => { write({}); return done; },
+    join: (rid, uid) => { const t = read(); const r = getIn(t, "rides/"+rid); if (!r) return Promise.resolve(false); const ps = r.passengers || {}; if (!ps[uid] && Object.keys(ps).length >= r.seats) return Promise.resolve(false); ps[uid] = ps[uid] || { at: Date.now() }; r.passengers = ps; write(t); return Promise.resolve(true); },
+    onConn: f => f(true),
+  };
+}
+let DB;
+try { DB = LIVE ? liveDB() : demoDB(); } catch(e){ console.error(e); DB = demoDB(); }
 
-function openPlus(onBuy){
-  const o=document.createElement("div"); o.className="overlay";
-  o.innerHTML=`<div class="plusCard">
-    <h2>⭐ Sadik Plus</h2>
-    <div class="price">$2 <small>/ month · or $10 per semester</small></div>
-    <ul>
-      <li>⛽ Fuel-split calculator: everyone knows what to pay</li>
-      <li>✅ Verified USJ students only</li>
-      <li>📅 Book your seat for the whole week</li>
-      <li>⏰ Ride reminders the night before</li>
-    </ul>
-    <button class="go" id="plusBuy">Get Plus</button>
-    <button class="link" id="plusClose" style="display:block;margin:10px auto 0">Maybe later</button>
-    <p class="note">Class demo: no real payment is taken.</p>
-  </div>`;
+/* =========================================================
+   STATE + DERIVED DATA
+   ========================================================= */
+let T = {};            // whole v2 tree
+let loaded = false;
+const users = () => T.users || {};
+const uname = id => (users()[id] || {}).name || "Someone";
+const isPlus = id => !!(users()[id] || {}).plus;
+function allRides(){
+  return Object.entries(T.rides || {}).map(([id, r]) => {
+    const ps = Object.entries(r.passengers || {}).map(([uid, v]) => ({ uid, ...(typeof v === "object" ? v : { at:v }) })).sort((a,b) => a.at-b.at);
+    return { ...r, id, ps, left: Math.max(0, (r.seats||0) - ps.length) };
+  }).filter(r => r.driver && r.zone && r.time).sort((a,b) => tmin(a.time)-tmin(b.time) || a.at-b.at);
+}
+function requestGroups(){
+  const map = {};
+  Object.entries(T.requests || {}).forEach(([uid, r]) => { if (!r || !r.zone) return; const k = r.zone+"~"+r.time; (map[k] = map[k] || { zone:r.zone, time:r.time, uids:[] }).uids.push(uid); });
+  return Object.values(map).sort((a,b) => b.uids.length-a.uids.length || tmin(a.time)-tmin(b.time));
+}
+function feed(icon, text){ DB.push("feed", { icon, text, at: Date.now() }); }
+
+/* =========================================================
+   SHARED UI PIECES
+   ========================================================= */
+function avatar(id, cls=""){ const n = uname(id); return `<span class="av ${cls} ${isPlus(id)?"star":""}" style="background:${avColor(id)}" title="${esc(n)}">${esc(initials(n))}</span>`; }
+function seatDots(r){ return `<span class="seatdots">${Array.from({length:r.seats}, (_,i) => `<i class="${i < r.ps.length ? "" : "free"}"></i>`).join("")}</span>`; }
+
+function toast(msg){ $$(".toast").forEach(t => t.remove()); const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2700); }
+
+function openSheet(html, onMount){
+  const o = document.createElement("div"); o.className = "overlay";
+  o.innerHTML = `<div class="sheet" role="dialog"><div class="grab"></div>${html}</div>`;
   document.body.appendChild(o);
-  const close=()=>o.remove();
-  o.querySelector("#plusClose").onclick=close;
-  o.onclick=e=>{ if(e.target===o) close(); };
-  o.querySelector("#plusBuy").onclick=()=>{
-    o.querySelector(".plusCard").innerHTML=`<h2>🎉 Welcome to Plus!</h2><p class="tag" style="margin:10px 0 16px">Your ride to USJ just got easier. Yalla!</p><button class="go" id="plusDone">Done</button>`;
-    o.querySelector("#plusDone").onclick=close;
-    onBuy();
+  const close = () => o.remove();
+  o.addEventListener("click", e => { if (e.target === o) close(); });
+  onMount && onMount($(".sheet", o), close);
+  return close;
+}
+// Two-tap confirm for destructive actions (no browser dialogs).
+function confirmTap(btn, armedLabel, action){
+  btn.onclick = () => {   // assigned (not added) so re-renders never stack handlers
+    if (btn.dataset.armed){ action(); return; }
+    btn.dataset.armed = "1"; const old = btn.innerHTML; btn.innerHTML = armedLabel;
+    setTimeout(() => { if (btn.isConnected){ delete btn.dataset.armed; btn.innerHTML = old; } }, 3000);
   };
 }
 
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-
-/* =========================================================
-   6) PHONE VIEW
-   ========================================================= */
-function phone(){
-  document.getElementById("phoneView").classList.remove("hidden");
-  initRideWidget("","sadik-me",document.getElementById("widget-"));
+function zonePicker(current, onPick){
+  openSheet(`<h2>Where from?</h2><p class="muted small" style="margin-bottom:14px">Pick the area closest to home.</p>
+    <div class="zonelist">${ZONES.map(z => `<button class="zone ${z.id===current?"on":""}" data-z="${z.id}"><div><b>${z.name}</b><span>${z.towns}</span></div><i class="ck"></i></button>`).join("")}</div>`,
+    (sh, close) => $$(".zone", sh).forEach(b => b.onclick = () => { close(); onPick(b.dataset.z); }));
+}
+function timePicker(title, current, onPick){
+  openSheet(`<h2>${esc(title)}</h2><p class="muted small" style="margin-bottom:14px">Morning departure to ${DEST}.</p>
+    <div class="grid3">${TIMES.map(t => `<button class="chip ${t===current?"on":""}" data-t="${t}">${t}</button>`).join("")}</div>`,
+    (sh, close) => $$(".chip", sh).forEach(b => b.onclick = () => { close(); onPick(b.dataset.t); }));
 }
 
-/* =========================================================
-   7) BIG SCREEN VIEW  (open with ?screen)
-   ========================================================= */
-function screen(){
-  document.getElementById("screenView").classList.remove("hidden");
-  const joinUrl=location.href.split("?")[0].split("#")[0];
-  document.getElementById("joinUrl").textContent=joinUrl;
-  try{ new QRCode(document.getElementById("qr"),{text:joinUrl,width:280,height:280,colorDark:"#0a5534",colorLight:"#ffffff"}); }catch(e){}
+/* ---------- Sadik Plus ---------- */
+const PERKS = [
+  ["⛽","Fuel-split calculator","Everyone sees exactly what to pay the driver"],
+  ["✅","Verified USJ students only","Filter rides to verified classmates"],
+  ["📅","Book your seat for the week","Keep your seat Monday to Friday"],
+  ["⏰","Ride reminders","A reminder the night before you ride"],
+];
+function openPlus(after){
+  const uid = App.uid;
+  openSheet(`<div class="plushead"><div style="font-weight:700;opacity:.9">⭐ Sadik Plus</div><div class="price">$2 <small>/ month · or $10 per semester</small></div><div class="small" style="opacity:.9;margin-top:4px">One shared ride saves more than that in gas.</div></div>
+    <div>${PERKS.map(p => `<div class="perk"><div class="e">${p[0]}</div><div><b>${p[1]}</b><span>${p[2]}</span></div></div>`).join("")}</div>
+    <button class="btn primary block" id="buy" style="margin-top:14px">Get Plus · ${PRICE}</button>
+    <button class="btn block" id="later" style="color:var(--muted);margin-top:4px">Maybe later</button>
+    <p class="democ">Class demo: no real payment is taken.</p>`,
+    (sh, close) => {
+      $("#later", sh).onclick = close;
+      $("#buy", sh).onclick = () => {
+        DB.update("users/"+uid, { plus: true, plusAt: Date.now() });
+        feed("⭐", `${uname(uid)} got Sadik Plus`);
+        sh.innerHTML = `<div class="grab"></div><div class="burst"><div class="e">🎉</div><h2 style="margin-top:8px">Welcome to Plus!</h2><p class="muted" style="margin:6px 0 18px">All Plus features are unlocked. Yalla!</p></div><button class="btn green block" id="ok">Done</button>`;
+        $("#ok", sh).onclick = () => { close(); after && after(); };
+      };
+    });
+}
+function requirePlus(fn){ if (isPlus(App.uid)) fn(); else openPlus(fn); }
 
-  onRiders(list=>{
-    const groups=groupRiders(list);
-    const real=groups.filter(g=>g.people.length>1);
-    const carsBefore=list.length;                             // everyone alone
-    const carsAfter=groups.reduce((s,g)=>s+Math.max(1,Math.ceil(g.people.length/4)),0); // 4 per car
-    const avg= real.length? Math.round(real.reduce((s,g)=>s+savedPct(g.people.length),0)/real.length):0;
-    document.getElementById("count").textContent=list.length;
-    document.getElementById("sGroups").textContent=real.length;
-    document.getElementById("sCars").textContent=Math.max(0,carsBefore-carsAfter);
-    document.getElementById("sSave").textContent=avg+"%";
-    document.getElementById("sPlus").textContent=list.filter(r=>r.plus).length;
-    const el=document.getElementById("groups");
-    if(!list.length){ el.innerHTML=`<div class="empty">Waiting for the first classmate to scan… 📱</div>`; return; }
-    el.innerHTML=groups.map(g=>{
-      const info=seatInfo(g.people);
-      return `<div class="group ${g.people.length>1?"":"solo"}">
-        <h3>📍 ${zoneName(g.zone)}</h3><div class="when">Leaving at ${g.time}</div>
-        <div class="people">${g.people.map(p=>`<span class="person ${p.car==="yes"?"car":""} ${p.plus?"plus":""}">${esc(p.name)}</span>`).join("")}</div>
-        ${g.people.length>1?`<span class="badge">${info.drivers?`${info.seatTotal} seat${info.seatTotal!==1?"s":""} free`:"Needs a driver"}</span>`:""}
-      </div>`;
-    }).join("");
+/* ---------- ride card ---------- */
+function rideCard(r, uid){
+  const mine = r.driver === uid, riding = r.ps.some(p => p.uid === uid);
+  const status = mine ? `<span class="status mine">You drive</span>` : riding ? `<span class="status mine">You're in</span>`
+    : r.left ? `<span class="status ok">${plural(r.left,"seat")} left</span>` : `<span class="status full">Full</span>`;
+  return `<button class="ride" data-ride="${r.id}">
+    <div class="time">${r.time}<small>${r.weekly ? "Mon–Fri" : "Tomorrow"}</small></div>
+    <div style="min-width:0">
+      <div class="who">${avatar(r.driver)}<span>${esc(uname(r.driver))}</span>${isPlus(r.driver) ? '<span class="tagv">✓ Verified</span>' : ""}</div>
+      <div class="route">${esc(zone(r.zone).name)} → ${DEST}</div>
+      ${r.note ? `<div class="note">📍 ${esc(r.note)}</div>` : ""}
+    </div>
+    <div class="rside">${seatDots(r)}${status}${r.ps.length ? `<div class="avstack" style="justify-content:flex-end;margin-top:6px">${r.ps.slice(0,4).map(p => avatar(p.uid)).join("")}</div>` : ""}</div>
+  </button>`;
+}
+function bindRideCards(el){ $$("[data-ride]", el).forEach(b => b.onclick = () => go("ride/"+b.dataset.ride)); }
+
+/* =========================================================
+   PHONE APP
+   ========================================================= */
+const App = {
+  uid: localStorage.getItem(UID_KEY),
+  view: null,
+  me(){ return this.uid && users()[this.uid] ? { id:this.uid, ...users()[this.uid] } : null; },
+};
+function go(hash){ if (location.hash.slice(1) === hash) mount(); else location.hash = hash; }
+function route(){ const h = decodeURIComponent(location.hash.slice(1)) || "find"; const i = h.indexOf("/"); return i < 0 ? { name:h, arg:"" } : { name:h.slice(0,i), arg:h.slice(i+1) }; }
+
+function appShell(){
+  $("#root").innerHTML = `<div id="app">
+    <header class="topbar" id="topbar"></header>
+    <main id="view"></main>
+    <nav class="tabbar" id="tabbar" role="tablist">
+      <button class="tab" data-tab="find">${ICON.search}<span>Find</span></button>
+      <button class="tab" data-tab="offer">${ICON.plus}<span>Offer</span></button>
+      <button class="tab" data-tab="rides">${ICON.car}<span>My rides</span><span class="badge hidden" id="ridesBadge"></span></button>
+      <button class="tab" data-tab="me">${ICON.user}<span>Me</span></button>
+    </nav>
+  </div>${LIVE ? "" : '<div class="modebar">Demo mode: data stays on this computer</div>'}`;
+  $$(".tab").forEach(t => t.onclick = () => go(t.dataset.tab));
+}
+function renderChrome(){
+  const me = App.me(); if (!me) return;
+  setHTML($("#topbar"), `<div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
+    <div class="right">${KIOSK ? `<button class="pill ghost" id="nextPerson">↻ Next person</button>` : ""}
+    ${me.plus ? `<button class="pill plus" id="plusPill">⭐ Plus</button>` : `<button class="pill get" id="plusPill">Get Plus</button>`}</div>`);
+  const pp = $("#plusPill"); if (pp) pp.onclick = () => me.plus ? go("me") : openPlus();
+  const np = $("#nextPerson"); if (np) np.onclick = signOut;
+  const r = route().name;
+  $$(".tab").forEach(t => t.classList.toggle("on", t.dataset.tab === (r === "ride" ? App.lastTab || "find" : r)));
+  const n = allRides().filter(x => x.driver === me.id || x.ps.some(p => p.uid === me.id)).length + ((T.requests||{})[me.id] ? 1 : 0);
+  const b = $("#ridesBadge"); b.textContent = n; b.classList.toggle("hidden", !n);
+}
+function signOut(){ localStorage.removeItem(UID_KEY); App.uid = null; FindView.reset(); OfferView.reset(); $$(".overlay").forEach(o => o.remove()); if (location.hash) location.hash = ""; else mount(); }
+
+function mount(){
+  if (MODE !== "app") return;
+  const root = $("#root");
+  if (!loaded){ root.innerHTML = `<div class="splash"><div><div class="brand" style="justify-content:center"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div><div class="spinner"></div><div class="small" id="splashMsg">Connecting…</div></div></div>`; return; }
+  if (!App.me()){ App.view = null; Onboarding.mount(root); return; }
+  if (!$("#app")) appShell();
+  const r = route();
+  const V = { find:FindView, offer:OfferView, rides:RidesView, me:MeView, ride:RideView }[r.name] || FindView;
+  if (r.name !== "ride") App.lastTab = r.name in { find:1, offer:1, rides:1, me:1 } ? r.name : "find";
+  const el = $("#view"); el.innerHTML = ""; el._h = null; el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter");
+  App.view = V; V.mount(el, r.arg); V.update && V.update();
+  renderChrome(); window.scrollTo(0,0);
+}
+function refresh(){
+  if (MODE !== "app") return;
+  if (!App.me() || !$("#app")) { mount(); return; }
+  renderChrome(); App.view && App.view.update && App.view.update();
+}
+
+/* ---------- Onboarding: name, area, time, driver ---------- */
+const Onboarding = {
+  step: 0, d: { name:"", zone:null, time:"8:00", drives:null },
+  mount(root){ this.root = root; this.render(); },
+  render(){
+    const s = this.step, d = this.d, total = 4;
+    const bar = s ? `<div class="bar"><i style="width:${s/total*100}%"></i></div>` : "";
+    let body = "", canNext = true;
+    if (s === 0){
+      this.root.innerHTML = `<div class="onb enter"><div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
+        <div class="hero"><div class="art">🚗💨</div><h1>Your ride to USJ,<br>with friends.</h1><p>Find classmates who live near you and leave at the same time. Share the ride, split the fuel.</p></div>
+        <button class="btn primary block" id="start">Get started</button>
+        <p class="democ">Takes 15 seconds · only your first name</p></div>`;
+      $("#start").onclick = () => { this.step = 1; this.render(); };
+      return;
+    }
+    if (s === 1){ body = `<h1>What's your first name?</h1><p class="sub">This is how classmates will see you.</p><input class="text" id="nm" maxlength="16" placeholder="e.g. Edwin" autocomplete="given-name" value="${esc(d.name)}">`; canNext = !!d.name.trim(); }
+    if (s === 2){ body = `<h1>Where do you live?</h1><p class="sub">We'll show rides from your area first.</p><div class="zonelist">${ZONES.map(z => `<button class="zone ${z.id===d.zone?"on":""}" data-z="${z.id}"><div><b>${z.name}</b><span>${z.towns}</span></div><i class="ck"></i></button>`).join("")}</div>`; canNext = !!d.zone; }
+    if (s === 3){ body = `<h1>When do you usually leave?</h1><p class="sub">Your usual morning departure to ${DEST}.</p><div class="grid3">${TIMES.map(t => `<button class="chip ${t===d.time?"on":""}" data-t="${t}">${t}</button>`).join("")}</div>`; }
+    if (s === 4){ body = `<h1>Do you drive to USJ?</h1><p class="sub">You can always change this later.</p><div class="bigchoice">
+        <button data-dr="1" class="${d.drives===true?"on":""}"><span class="e">🚗</span><div><b>Yes, I drive</b><span>Offer your empty seats and split the fuel</span></div></button>
+        <button data-dr="0" class="${d.drives===false?"on":""}"><span class="e">🙋</span><div><b>No, I need rides</b><span>Find a classmate driving your way</span></div></button></div>`; canNext = d.drives !== null; }
+    this.root.innerHTML = `<div class="onb enter"><button class="back" id="bk">${ICON.back} Back</button>${bar}<div class="body">${body}</div>
+      <div class="foot"><button class="btn primary block" id="nx" ${canNext?"":"disabled"}>${s===total ? "Find my Sadik 🚗" : "Continue"}</button></div></div>`;
+    $("#bk").onclick = () => { this.step--; this.render(); };
+    const nx = $("#nx");
+    nx.onclick = () => { if (s < total){ this.step++; this.render(); } else this.finish(); };
+    const nm = $("#nm"); if (nm){ nm.focus(); nm.oninput = () => { d.name = nm.value; nx.disabled = !nm.value.trim(); }; nm.onkeydown = e => { if (e.key === "Enter" && nm.value.trim()) nx.click(); }; }
+    $$("[data-z]").forEach(b => b.onclick = () => { d.zone = b.dataset.z; this.render(); });
+    $$("[data-t]").forEach(b => b.onclick = () => { d.time = b.dataset.t; this.render(); });
+    $$("[data-dr]").forEach(b => b.onclick = () => { d.drives = b.dataset.dr === "1"; this.render(); });
+  },
+  finish(){
+    const d = this.d, uid = "u" + newId();
+    DB.set("users/"+uid, { name: d.name.trim().slice(0,16), zone: d.zone, time: d.time, drives: d.drives, at: Date.now() });
+    localStorage.setItem(UID_KEY, uid); App.uid = uid;
+    feed("👋", `${d.name.trim().slice(0,16)} joined from ${zone(d.zone).name}`);
+    FindView.reset(); OfferView.reset();
+    this.step = 0; this.d = { name:"", zone:null, time:"8:00", drives:null };
+    location.hash = d.drives ? "offer" : "find";
+    setTimeout(mount, 0);
+  }
+};
+
+/* ---------- Find ---------- */
+const FindView = {
+  f: null,
+  reset(){ this.f = null; },
+  mount(el){
+    const me = App.me();
+    if (!this.f) this.f = { zone: me.zone, time: me.time || "any", all:false, verified:false };
+    el.innerHTML = `<h1 class="title">Hi ${esc(me.name)} 👋</h1><p class="muted">Where are you riding from tomorrow?</p>
+      <div class="card search">
+        <button class="row" id="fZone"><span class="dot"></span><div><div class="lbl">From</div><div class="val" id="fZoneVal"></div></div><span class="chev">${ICON.chev}</span></button>
+        <div class="row"><span class="dot end"></span><div><div class="lbl">To</div><div class="val">${DEST}</div></div></div>
+      </div>
+      <div class="chiprow" id="fTimes"></div>
+      <div class="toggles" id="fToggles"></div>
+      <div id="fMyReq"></div>
+      <div id="fResults"></div>
+      <div id="fAsk"></div>
+      <div id="fDemand"></div>`;
+    $("#fZone").onclick = () => zonePicker(this.f.zone, z => { this.f.zone = z; this.f.all = false; this.update(); });
+  },
+  update(){
+    const me = App.me(), f = this.f, uid = me.id;
+    $("#fZoneVal").textContent = f.all ? "All areas" : zone(f.zone).name;
+    setHTML($("#fTimes"), ["any", ...TIMES].map(t => `<button class="chip ${t===f.time?"on":""}" data-t="${t}">${t==="any"?"Any time":t}</button>`).join(""));
+    $$("#fTimes .chip").forEach(b => b.onclick = () => { f.time = b.dataset.t; this.update(); });
+    setHTML($("#fToggles"), `<button class="chip ${f.all?"on":""}" id="fAll">🗺️ All areas</button>
+      <button class="chip ${f.verified?"on":""} ${isPlus(uid)?"":"lock"}" id="fVer">${isPlus(uid)?"✅":"🔒"} Verified only</button>`);
+    $("#fAll").onclick = () => { f.all = !f.all; this.update(); };
+    $("#fVer").onclick = () => requirePlus(() => { f.verified = !f.verified; this.update(); });
+
+    // my open request
+    const myReq = (T.requests || {})[uid];
+    setHTML($("#fMyReq"), myReq ? `<div class="waiting" style="margin-top:14px"><span class="ico">⏳</span><div style="flex:1"><b>You asked for a ride</b><span class="small muted">${esc(zone(myReq.zone).name)} · ${myReq.time}. Drivers can see your request.</span></div><button class="link small" id="cancelReq">Cancel</button></div>` : "");
+    const cr = $("#cancelReq"); if (cr) cr.onclick = () => { DB.remove("requests/"+uid); toast("Request cancelled"); };
+
+    let rs = allRides().filter(r => (f.all || r.zone === f.zone) && (!f.verified || isPlus(r.driver)));
+    const exact = f.time === "any" ? rs : rs.filter(r => r.time === f.time);
+    const others = f.time === "any" ? [] : rs.filter(r => r.time !== f.time);
+    const where = f.all ? "all areas" : zone(f.zone).name;
+    let html = "";
+    if (exact.length){
+      html += `<h2 class="section">${plural(exact.length,"ride")} ${f.time==="any" ? "" : "at "+f.time} <span class="muted small">from ${esc(where)}</span></h2><div class="stack">${exact.map(r => rideCard(r, uid)).join("")}</div>`;
+    } else {
+      html += `<div class="card empty" style="margin-top:16px"><div class="big">🚗💨</div><h3>No rides from ${esc(where)}${f.time==="any"?"":" at "+f.time} yet</h3>
+        <p>${others.length ? "There are rides at other times below." : "Ask for a ride and drivers will see it, or look in all areas."}</p>
+        <div class="row2">${myReq ? `<button class="btn soft" id="eAll">See all areas</button><button class="btn line" id="eOffer">Offer a ride</button>` : `<button class="btn primary" id="eAsk">Ask for a ride</button><button class="btn soft" id="eAll">${f.all ? "Any time" : "All areas"}</button>`}</div></div>`;
+    }
+    if (others.length) html += `<h2 class="section">Other times from ${esc(where)}</h2><div class="stack">${others.map(r => rideCard(r, uid)).join("")}</div>`;
+    setHTML($("#fResults"), html);
+    bindRideCards($("#fResults"));
+    const ea = $("#eAsk"); if (ea) ea.onclick = () => askForRide(f.zone, f.time);
+    const eal = $("#eAll"); if (eal) eal.onclick = () => { if (f.all) f.time = "any"; else f.all = true; this.update(); };
+    const eo = $("#eOffer"); if (eo) eo.onclick = () => go("offer");
+
+    setHTML($("#fAsk"), (exact.length && !myReq) ? `<div class="card" style="margin-top:18px;display:flex;gap:12px;align-items:center"><span style="font-size:1.6rem">🙋</span><div style="flex:1"><b>None of these work?</b><div class="small muted">Ask for a ride and drivers will see it.</div></div><button class="btn soft" id="askBtn">Ask</button></div>` : "");
+    const ab = $("#askBtn"); if (ab) ab.onclick = () => askForRide(f.all ? me.zone : f.zone, f.time);
+
+    const groups = requestGroups().filter(g => !(g.uids.length === 1 && g.uids[0] === uid));
+    setHTML($("#fDemand"), groups.length ? `<h2 class="section">Classmates looking for a ride</h2><div class="stack">${groups.slice(0,5).map(g => `
+      <div class="req"><div class="avstack">${g.uids.slice(0,3).map(u => avatar(u)).join("")}</div><div class="info"><b>${plural(g.uids.length,"person","people")} · ${esc(zone(g.zone).name)}</b><span class="small muted">Leaving at ${g.time}</span></div>
+      <button class="btn soft" style="padding:9px 12px" data-offer="${g.zone}~${g.time}">Drive them</button></div>`).join("")}</div>` : "");
+    $$("[data-offer]").forEach(b => b.onclick = () => { const [z,t] = b.dataset.offer.split("~"); OfferView.d = { ...OfferView.blank(), zone:z, time:t }; go("offer"); });
+  }
+};
+function askForRide(z, t){
+  const uid = App.uid;
+  const save = time => {
+    DB.set("requests/"+uid, { zone: z, time, at: Date.now() });
+    feed("🙋", `${uname(uid)} is looking for a ride from ${zone(z).name} at ${time}`);
+    toast("Request posted! Drivers can see it now.");
+  };
+  if (t === "any") timePicker("When do you want to leave?", (users()[uid]||{}).time, save); else save(t);
+}
+
+/* ---------- Offer ---------- */
+const OfferView = {
+  d: null,
+  blank(){ const me = App.me(); return { zone: me.zone, time: me.time || "8:00", seats: 3, note: "", weekly: false }; },
+  reset(){ this.d = null; },
+  mount(el, arg){
+    if (!this.d) this.d = this.blank();
+    const d = this.d;
+    el.innerHTML = `<h1 class="title">Offer a ride</h1><p class="muted" style="margin-bottom:16px">Fill your empty seats and split the fuel.</p>
+      <div id="oHint"></div>
+      <div class="field"><label>Leaving from</label><button class="pick" id="oZone"><span>📍</span><div><b id="oZoneN"></b><div class="small muted" id="oZoneT"></div></div><span class="chev">${ICON.chev}</span></button></div>
+      <div class="field"><label>Leaving at</label><div class="grid3" id="oTimes"></div></div>
+      <div class="field"><label>Free seats</label><div class="stepper"><button id="oMinus" aria-label="Fewer seats">−</button><span class="n" id="oSeats"></span><button id="oPlus" aria-label="More seats">+</button><span class="muted small">besides you</span></div></div>
+      <div class="field"><label>Meeting point <span class="muted small" style="font-weight:400">(optional)</span></label><input class="text" id="oNote" maxlength="60" placeholder="e.g. Jdeideh roundabout" value="${esc(d.note)}"></div>
+      <div class="field" id="oWeekly"></div>
+      <button class="btn primary block" id="oPublish">Publish ride</button>
+      <div id="oMine"></div>`;
+    $("#oZone").onclick = () => zonePicker(d.zone, z => { d.zone = z; this.update(); });
+    $("#oMinus").onclick = () => { d.seats = Math.max(1, d.seats-1); this.update(); };
+    $("#oPlus").onclick = () => { d.seats = Math.min(4, d.seats+1); this.update(); };
+    $("#oNote").oninput = e => d.note = e.target.value;
+    $("#oPublish").onclick = () => this.publish();
+  },
+  update(){
+    const d = this.d, uid = App.uid;
+    $("#oZoneN").textContent = zone(d.zone).name; $("#oZoneT").textContent = zone(d.zone).towns;
+    setHTML($("#oTimes"), TIMES.map(t => `<button class="chip ${t===d.time?"on":""}" data-t="${t}">${t}</button>`).join(""));
+    $$("#oTimes .chip").forEach(b => b.onclick = () => { d.time = b.dataset.t; this.update(); });
+    $("#oSeats").textContent = d.seats; $("#oMinus").disabled = d.seats <= 1; $("#oPlus").disabled = d.seats >= 4;
+    const want = Object.entries(T.requests || {}).filter(([u,r]) => u !== uid && r.zone === d.zone && r.time === d.time).length;
+    setHTML($("#oHint"), want ? `<div class="hint">🔥 ${plural(want,"classmate")} ${want===1?"needs":"need"} a ride from ${esc(zone(d.zone).name)} at ${d.time}</div>` : "");
+    const plus = isPlus(uid);
+    setHTML($("#oWeekly"), `<button class="lockrow ${plus?"unlocked":""}" id="oWk"><span style="font-size:1.3rem">📅</span><div class="t"><b>Repeat Monday to Friday</b><span>${plus ? "Same ride every weekday" : "Sadik Plus feature"}</span></div>${plus ? `<span class="switch ${d.weekly?"on":""}"></span>` : "🔒"}</button>`);
+    $("#oWk").onclick = () => requirePlus(() => { d.weekly = !d.weekly; this.update(); });
+    const mine = allRides().filter(r => r.driver === uid);
+    setHTML($("#oMine"), mine.length ? `<h2 class="section">Rides you're offering</h2><div class="stack">${mine.map(r => rideCard(r, uid)).join("")}</div>` : "");
+    bindRideCards($("#oMine"));
+  },
+  publish(){
+    const d = this.d, uid = App.uid;
+    if (allRides().some(r => r.driver === uid && r.time === d.time)){ toast(`You already offer a ride at ${d.time}`); return; }
+    const rid = DB.push("rides", { driver: uid, zone: d.zone, time: d.time, seats: d.seats, note: d.note.trim().slice(0,60), weekly: !!d.weekly, at: Date.now() });
+    if ((T.requests||{})[uid]) DB.remove("requests/"+uid);
+    feed("🚗", `${uname(uid)} offered ${plural(d.seats,"seat")} from ${zone(d.zone).name} at ${d.time}`);
+    if (!(users()[uid]||{}).drives) DB.update("users/"+uid, { drives: true });
+    toast("Ride published! 🎉");
+    this.d = this.blank();
+    go("ride/"+rid);
+  }
+};
+
+/* ---------- Ride detail ---------- */
+const RideView = {
+  fuel: 6,
+  mount(el, rid){
+    this.rid = rid;
+    el.innerHTML = `<button class="back" id="rBack">${ICON.back} Back</button>
+      <div id="rMain"></div><div id="rPerks"></div><div id="rChat"></div><div class="actionbar" id="rAct"></div>`;
+    $("#rBack").onclick = () => history.length > 1 ? history.back() : go("find");
+  },
+  ride(){ return allRides().find(r => r.id === this.rid); },
+  update(){
+    const r = this.ride(), uid = App.uid;
+    if (!r){ setHTML($("#rMain"), `<div class="card empty"><div class="big">🚫</div><h3>This ride isn't available anymore</h3><p>The driver may have cancelled it.</p><button class="btn soft" id="rFind">Find another ride</button></div>`); setHTML($("#rPerks"),""); setHTML($("#rChat"),""); setHTML($("#rAct"),""); const f = $("#rFind"); if (f) f.onclick = () => go("find"); return; }
+    const isDriver = r.driver === uid, me = r.ps.find(p => p.uid === uid), member = isDriver || !!me, z = zone(r.zone);
+    setHTML($("#rMain"), `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div class="muted small">${r.weekly ? "Every weekday" : "Tomorrow morning"}</div><h1 class="title" style="margin:0">${r.time} departure</h1></div>${r.weekly ? '<span class="status ok">📅 Mon–Fri</span>' : ""}</div>
+        <div class="timeline"><div class="stop"><div class="t">${r.time} · ${esc(z.name)}</div><div class="s">${esc(r.note ? "📍 "+r.note : z.towns)}</div></div><div class="stop end"><div class="t">${DEST}</div><div class="s">INCI-USJ</div></div></div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="person">${avatar(r.driver,"md")}<div class="n">${esc(uname(r.driver))}${isDriver?" (you)":""}<small>Driver ${isPlus(r.driver) ? "· ✓ Verified USJ" : ""}</small></div><span style="font-size:1.4rem">🚗</span></div>
+        ${r.ps.map(p => `<div class="person">${avatar(p.uid,"md")}<div class="n">${esc(uname(p.uid))}${p.uid===uid?" (you)":""}<small>Passenger${p.weekly ? " · 📅 Mon–Fri" : ""}</small></div></div>`).join("")}
+        <div style="margin-top:10px"><b>${r.left ? `${plural(r.left,"seat")} left` : "This car is full"}</b> <span class="muted small">of ${r.seats}</span>
+        <div class="seatbig">${Array.from({length:r.seats},(_,i) => i < r.ps.length ? `<i title="${esc(uname(r.ps[i].uid))}">${esc(initials(uname(r.ps[i].uid)))}</i>` : `<i class="free">+</i>`).join("")}</div></div>
+      </div>`);
+
+    // Plus perks (only meaningful for people in the car)
+    const plus = isPlus(uid);
+    let perks = "";
+    if (member){
+      const occupants = 1 + r.ps.length;
+      perks += `<h2 class="section">Plus tools</h2><div class="stack">`;
+      if (plus){
+        perks += `<div class="card"><b>⛽ Fuel split</b><div class="small muted">Enter the fuel cost for the trip.</div>
+          <div class="fuel"><span>$</span><input class="text" id="fuelIn" type="number" min="0" step="0.5" value="${this.fuel}" inputmode="decimal"><span class="res" id="fuelRes"></span></div></div>`;
+      } else {
+        perks += `<button class="lockrow" id="lkFuel"><span style="font-size:1.3rem">⛽</span><div class="t"><b>Fuel-split calculator</b><span>See exactly what each person pays · Plus</span></div>🔒</button>`;
+      }
+      if (me) perks += `<button class="lockrow ${plus?"unlocked":""}" id="lkWeek"><span style="font-size:1.3rem">📅</span><div class="t"><b>Keep my seat Mon–Fri</b><span>${plus?"Your seat is saved every weekday":"Plus feature"}</span></div>${plus ? `<span class="switch ${me.weekly?"on":""}"></span>` : "🔒"}</button>`;
+      perks += `<button class="lockrow ${plus?"unlocked":""}" id="lkRem"><span style="font-size:1.3rem">⏰</span><div class="t"><b>Remind me the night before</b><span>${plus?"Reminder at 10 pm":"Plus feature"}</span></div>${plus ? `<span class="switch ${(me||{}).remind || (isDriver && r.remind) ?"on":""}"></span>` : "🔒"}</button>`;
+      perks += `</div>`;
+      this.occupants = occupants;
+    }
+    setHTML($("#rPerks"), perks);
+    const fi = $("#fuelIn");
+    const showFuel = () => { const c = parseFloat(($("#fuelIn")||{}).value); const res = $("#fuelRes"); if (res) res.textContent = c > 0 ? `≈ $${(c/this.occupants).toFixed(2)} each (${this.occupants} people)` : ""; };
+    if (fi){ fi.oninput = () => { this.fuel = fi.value; showFuel(); }; showFuel(); }
+    const lf = $("#lkFuel"); if (lf) lf.onclick = () => openPlus();
+    const lw = $("#lkWeek"); if (lw) lw.onclick = () => requirePlus(() => { const cur = (this.ride().ps.find(p=>p.uid===uid)||{}).weekly; DB.set(`rides/${r.id}/passengers/${uid}/weekly`, cur ? null : true); toast(cur ? "Back to tomorrow only" : "Seat saved Monday to Friday 📅"); });
+    const lr = $("#lkRem"); if (lr) lr.onclick = () => requirePlus(() => { const path = isDriver ? `rides/${r.id}/remind` : `rides/${r.id}/passengers/${uid}/remind`; const cur = isDriver ? r.remind : (me||{}).remind; DB.set(path, cur ? null : true); toast(cur ? "Reminder off" : "We'll remind you at 10 pm ⏰"); });
+
+    // Chat
+    if (member){
+      if (!$("#msgs")){
+        $("#rChat").innerHTML = `<h2 class="section">Group chat</h2><div class="card"><div class="msgs" id="msgs"></div><div class="composer"><input class="text" id="msgIn" maxlength="200" placeholder="Message the car…"><button class="btn green" id="msgSend">Send</button></div></div>`;
+        $("#rChat")._h = null;
+        const send = () => { const i = $("#msgIn"), t = i.value.trim(); if (!t) return; DB.push(`chats/${r.id}`, { uid, text: t.slice(0,200), at: Date.now() }); i.value = ""; };
+        $("#msgSend").onclick = send; $("#msgIn").onkeydown = e => { if (e.key === "Enter") send(); };
+      }
+      const box = $("#msgs"), nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+      const msgs = Object.values((T.chats || {})[r.id] || {}).sort((a,b) => a.at-b.at);
+      setHTML(box, msgs.length ? msgs.map(m => `<div class="bubble ${m.uid===uid?"me":""}">${m.uid===uid ? "" : `<b>${esc(uname(m.uid))}</b>`}${esc(m.text)}<span class="tm">${new Date(m.at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</span></div>`).join("") : `<div class="muted small" style="text-align:center;padding:10px">Say hi and agree on the meeting point 👋</div>`);
+      if (nearBottom) box.scrollTop = box.scrollHeight;
+    } else {
+      setHTML($("#rChat"), `<div class="card" style="margin-top:12px;text-align:center"><span class="muted small">💬 Join this ride to chat with the car.</span></div>`);
+    }
+
+    // Main action
+    let act = "";
+    if (isDriver) act = `<button class="btn danger block" id="aCancel">Cancel this ride</button>`;
+    else if (me) act = `<div class="row2"><button class="btn line" id="aShare">Share</button><button class="btn danger" id="aLeave">Leave ride</button></div>`;
+    else if (r.left) act = `<button class="btn primary block" id="aJoin">Join ${esc(uname(r.driver))}'s ride · ${plural(r.left,"seat")} left</button>`;
+    else act = `<button class="btn line block" disabled>This car is full</button>`;
+    setHTML($("#rAct"), act);
+    const aj = $("#aJoin"); if (aj) aj.onclick = () => joinRide(r.id);
+    const al = $("#aLeave"); if (al) confirmTap(al, "Tap again to leave", () => { DB.remove(`rides/${r.id}/passengers/${uid}`); toast("You left the ride"); });
+    const ac = $("#aCancel"); if (ac) confirmTap(ac, "Tap again to cancel the ride", () => { DB.remove("rides/"+r.id); DB.remove("chats/"+r.id); feed("❌", `${uname(uid)} cancelled the ${r.time} ride from ${zone(r.zone).name}`); toast("Ride cancelled"); go("rides"); });
+    const as = $("#aShare"); if (as) as.onclick = () => shareApp(`I'm riding to USJ with ${uname(r.driver)} at ${r.time} on Sadik 🚗`);
+  }
+};
+function joinRide(rid){
+  const uid = App.uid, before = allRides();
+  DB.join(rid, uid).then(ok => {
+    if (!ok){ toast("Sorry, this car just filled up"); return; }
+    const r = allRides().find(x => x.id === rid) || before.find(x => x.id === rid);
+    // One morning ride per person: leave any other car at the same time.
+    before.filter(x => x.id !== rid && x.time === r.time && x.ps.some(p => p.uid === uid)).forEach(x => DB.remove(`rides/${x.id}/passengers/${uid}`));
+    if ((T.requests||{})[uid]) DB.remove("requests/"+uid);
+    feed("🤝", `${uname(uid)} joined ${uname(r.driver)}'s ${r.time} ride`);
+    toast("You're in! 🎉 Say hi in the group chat.");
   });
-
-  // rehearsal tools
-  const FAKE=["Maya","Karim","Rita","Elie","Nour","Joe","Lea","Charbel","Yara","Marc","Tia","Ralph","Christa","Georges","Sara"];
-  document.getElementById("fake").onclick=()=>{
-    const z=ZONES[Math.floor(Math.random()*4)].id;   // first 4 zones so matches happen often
-    const isDriver=Math.random()<.4;
-    Store.add({name:FAKE[Math.floor(Math.random()*FAKE.length)],zone:z,time:TIMES[1+Math.floor(Math.random()*2)],car:isDriver?"yes":"no",seats:isDriver?(1+Math.floor(Math.random()*3)):0,at:Date.now()});
-  };
-  document.getElementById("reset").onclick=()=>{ if(confirmReset()) Store.reset(); };
-
-  // tabs: live dashboard vs. in-person kiosk (join without a phone)
-  const tabDash=document.getElementById("tabDash"), tabKiosk=document.getElementById("tabKiosk");
-  const dashPane=document.getElementById("dashPane"), kioskPane=document.getElementById("kioskPane");
-  let kioskBuilt=false;
-  tabDash.onclick=()=>{ tabDash.classList.add("on"); tabKiosk.classList.remove("on"); dashPane.classList.remove("hidden"); kioskPane.classList.add("hidden"); };
-  tabKiosk.onclick=()=>{
-    tabKiosk.classList.add("on"); tabDash.classList.remove("on"); kioskPane.classList.remove("hidden"); dashPane.classList.add("hidden");
-    if(!kioskBuilt){ initRideWidget("k-","sadik-me-kiosk",document.getElementById("widget-k-")); kioskBuilt=true; }
-  };
 }
-// simple two-click reset instead of a browser dialog
-let resetArmed=false;
-function confirmReset(){
-  const b=document.getElementById("reset");
-  if(resetArmed){ resetArmed=false; b.textContent="Reset all"; return true; }
-  resetArmed=true; b.textContent="Click again to reset"; setTimeout(()=>{resetArmed=false;b.textContent="Reset all";},3000); return false;
+async function shareApp(text){
+  const url = location.origin + location.pathname;
+  if (navigator.share){ try { await navigator.share({ title:"Sadik", text, url }); return; } catch(e){} }
+  try { await navigator.clipboard.writeText(`${text} ${url}`); toast("Link copied ✅"); } catch(e){ toast(url); }
 }
 
-new URLSearchParams(location.search).has("screen") ? screen() : phone();
+/* ---------- My rides ---------- */
+const RidesView = {
+  mount(el){ el.innerHTML = `<h1 class="title">My rides</h1><p class="muted">Tomorrow morning to ${DEST}.</p><div id="mrBody"></div>`; },
+  update(){
+    const uid = App.uid, rs = allRides();
+    const driving = rs.filter(r => r.driver === uid), riding = rs.filter(r => r.ps.some(p => p.uid === uid)), req = (T.requests||{})[uid];
+    if (!driving.length && !riding.length && !req){
+      setHTML($("#mrBody"), `<div class="card empty" style="margin-top:16px"><div class="big">🪑</div><h3>No rides yet</h3><p>Find a classmate driving your way, or offer your empty seats.</p><div class="row2"><button class="btn primary" data-go="find">Find a ride</button><button class="btn soft" data-go="offer">Offer a ride</button></div></div>`);
+    } else {
+      const carsSaved = driving.reduce((s,r) => s + r.ps.length, 0) + riding.length;
+      const people = new Set([...driving.flatMap(r => r.ps.map(p => p.uid)), ...riding.flatMap(r => [r.driver, ...r.ps.map(p => p.uid)])]); people.delete(uid);
+      let h = `<div class="impact" style="margin-top:14px"><div class="card"><b>${carsSaved}</b><span>${carsSaved===1?"car":"cars"} off the road tomorrow</span></div><div class="card"><b>${people.size}</b><span>classmates you ride with</span></div></div>`;
+      if (req){
+        const m = rs.filter(r => r.zone === req.zone && r.time === req.time && r.left).length;
+        h += `<h2 class="section">Waiting for a driver</h2><div class="waiting"><span class="ico">⏳</span><div style="flex:1"><b>${esc(zone(req.zone).name)} · ${req.time}</b><span class="small muted">${m ? `${plural(m,"ride")} match your request` : "Drivers can see your request"}</span></div><button class="link small" id="mrCancel">Cancel</button></div>`;
+      }
+      if (driving.length) h += `<h2 class="section">You're driving</h2><div class="stack">${driving.map(r => rideCard(r, uid)).join("")}</div>`;
+      if (riding.length) h += `<h2 class="section">You're riding</h2><div class="stack">${riding.map(r => rideCard(r, uid)).join("")}</div>`;
+      setHTML($("#mrBody"), h);
+      const c = $("#mrCancel"); if (c) c.onclick = () => { DB.remove("requests/"+uid); toast("Request cancelled"); };
+      bindRideCards($("#mrBody"));
+    }
+    $$("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+  }
+};
+
+/* ---------- Me ---------- */
+const MeView = {
+  mount(el){ el.innerHTML = `<div id="meBody"></div>`; },
+  update(){
+    const me = App.me();
+    setHTML($("#meBody"), `
+      <div class="card profile" style="margin-top:8px">${avatar(me.id,"lg")}<div style="flex:1"><div class="n">${esc(me.name)}</div><div class="muted small">${esc(zone(me.zone).name)} · usually ${me.time || "8:00"}</div>
+        <div style="margin-top:6px"><span class="status ok">${me.drives ? "🚗 Driver" : "🙋 Passenger"}</span> ${me.plus ? '<span class="status mine">⭐ Plus</span>' : ""}</div></div></div>
+      <div style="margin-top:14px">${me.plus
+        ? `<div class="pluscard"><h3>⭐ You're a Plus member</h3><ul>${PERKS.map(p => `<li>${p[0]} ${p[1]}</li>`).join("")}</ul><div class="small" style="opacity:.9">Thanks for supporting Sadik!</div></div>`
+        : `<div class="pluscard"><h3>⭐ Get Sadik Plus</h3><ul>${PERKS.map(p => `<li>${p[0]} ${p[1]}</li>`).join("")}</ul><button class="btn block" id="meBuy">Get Plus · ${PRICE}</button></div>`}</div>
+      <div class="menu" style="margin-top:14px">
+        <button id="meEdit">✏️ Edit my profile <span class="chev">${ICON.chev}</span></button>
+        <button id="meShare">📤 Share Sadik with friends <span class="chev">${ICON.chev}</span></button>
+        <button id="meHow">💡 How Sadik works <span class="chev">${ICON.chev}</span></button>
+        <button id="meOut" class="red">↩️ ${KIOSK ? "Next person" : "Sign out on this device"}</button>
+      </div>
+      <p class="democ" style="margin-top:18px">Sadik 🌲 made at USJ</p>`);
+    const b = $("#meBuy"); if (b) b.onclick = () => openPlus();
+    $("#meEdit").onclick = editProfile;
+    $("#meShare").onclick = () => shareApp("Find classmates to ride with to USJ on Sadik 🚗");
+    $("#meHow").onclick = () => openSheet(`<h2>How Sadik works</h2><div style="margin-top:10px">
+      <div class="perk"><div class="e">🔍</div><div><b>Find</b><span>See classmates driving from your area at your time.</span></div></div>
+      <div class="perk"><div class="e">🤝</div><div><b>Join</b><span>Take a free seat in one tap. Seats can't be double-booked.</span></div></div>
+      <div class="perk"><div class="e">💬</div><div><b>Chat & go</b><span>Agree on the meeting point in the car's group chat.</span></div></div>
+      <div class="perk"><div class="e">🙋</div><div><b>No ride yet?</b><span>Ask for one, and drivers from your area will see it.</span></div></div></div>`);
+    const out = $("#meOut");
+    if (KIOSK) out.onclick = signOut; else confirmTap(out, "Tap again to sign out", signOut);
+  }
+};
+function editProfile(){
+  const me = App.me(), d = { name: me.name, zone: me.zone, time: me.time || "8:00", drives: !!me.drives };
+  openSheet(`<h2>Edit profile</h2><div style="margin-top:14px">
+    <div class="field"><label>First name</label><input class="text" id="epName" maxlength="16" value="${esc(d.name)}"></div>
+    <div class="field"><label>Area</label><button class="pick" id="epZone"><span>📍</span><b id="epZoneN">${esc(zone(d.zone).name)}</b><span class="chev">${ICON.chev}</span></button></div>
+    <div class="field"><label>Usual time</label><button class="pick" id="epTime"><span>🕗</span><b id="epTimeN">${d.time}</b><span class="chev">${ICON.chev}</span></button></div>
+    <div class="field"><button class="lockrow unlocked" id="epDr"><span style="font-size:1.3rem">🚗</span><div class="t"><b>I drive to USJ</b><span>Show me as a driver</span></div><span class="switch ${d.drives?"on":""}" id="epSw"></span></button></div>
+    <button class="btn primary block" id="epSave">Save</button></div>`,
+    (sh, close) => {
+      $("#epZone", sh).onclick = () => zonePicker(d.zone, z => { d.zone = z; $("#epZoneN", sh).textContent = zone(z).name; });
+      $("#epTime", sh).onclick = () => timePicker("Usual time", d.time, t => { d.time = t; $("#epTimeN", sh).textContent = t; });
+      $("#epDr", sh).onclick = () => { d.drives = !d.drives; $("#epSw", sh).classList.toggle("on", d.drives); };
+      $("#epSave", sh).onclick = () => { const n = $("#epName", sh).value.trim().slice(0,16); if (!n){ toast("Please enter your name"); return; } DB.update("users/"+App.uid, { name:n, zone:d.zone, time:d.time, drives:d.drives }); FindView.reset(); OfferView.reset(); close(); toast("Profile saved"); };
+    });
+}
+
+/* =========================================================
+   BIG SCREEN DASHBOARD  (?screen)
+   ========================================================= */
+const MAP = { // schematic positions (north up, sea on the left), not to scale
+  campus:[250,152],
+  "jbeil":[200,22], "keserwan":[228,64], "metn-coast":[180,104], "upper-metn":[330,108],
+  "beirut":[122,168], "dekwaneh":[300,190], "baabda":[188,226], "south":[150,274]
+};
+const Screen = {
+  prev: {}, seen: new Set(), auto: null, tab: "board",
+  mount(){
+    const url = location.origin + location.pathname;
+    $("#root").innerHTML = `<div class="screen">
+      <aside class="side">
+        <div class="brand"><div class="logo">🌲</div><span>Sa<em>dik</em></span></div>
+        <div><div class="scan">📱 Scan to join</div><div class="qrbox" id="qr"></div><div class="url">${esc(url.replace(/^https?:\/\//,""))}</div></div>
+        <div class="count"><span id="sUsers">0</span><small>classmates on Sadik</small></div>
+        <span class="conn ${LIVE?"":"off"}" id="conn"><i></i>${LIVE ? "Connecting…" : "Demo mode"}</span>
+        <div class="tools"><button id="tSim">+ Simulate</button><button id="tAuto">▶ Auto demo</button><button id="tReset">Reset all</button></div>
+      </aside>
+      <section class="main">
+        <div class="mhead"><h1>Tomorrow's rides to USJ 🇱🇧</h1><div class="stabs"><button id="tbBoard" class="on">🗺️ Live board</button><button id="tbKiosk">🙋 Join here</button></div><div class="clock" id="clock"></div></div>
+        <div id="boardPane" style="display:flex;flex-direction:column;gap:inherit;flex:1;min-height:0">
+          <div class="stats">
+            <div class="stat"><b id="kRides">0</b><span>rides offered</span></div>
+            <div class="stat"><b id="kSeats">0</b><span>seats filled</span></div>
+            <div class="stat"><b id="kCars">0</b><span>cars off the road</span></div>
+            <div class="stat"><b id="kFuel">0%</b><span>avg. fuel saved per car</span></div>
+            <div class="stat red"><b id="kPlus">0</b><span>⭐ Plus members</span></div>
+          </div>
+          <div class="board">
+            <div class="panel"><h2>🚦 Departures <span class="n" id="depN"></span></h2><div class="deps" id="deps"></div></div>
+            <div class="panel"><h2>📍 Where we're coming from <span class="n">schematic</span></h2><div class="mapwrap" id="map"></div>
+              <h2 style="margin-top:6px">🙋 Looking for a ride <span class="n" id="waitN"></span></h2><div class="waitlist" id="wait"></div></div>
+          </div>
+          <div class="ticker" id="ticker"></div>
+        </div>
+        <div id="kioskPane" class="kioskwrap hidden">
+          <div class="kinfo"><h2>No phone?<br>Join right here.</h2><ul><li><b>1</b>Tap “Get started” and answer 4 quick questions</li><li><b>2</b>Pick a ride and tap Join</li><li><b>3</b>Tap “↻ Next person” when you're done</li></ul></div>
+          <div class="device"><iframe id="kframe" title="Sadik on this screen"></iframe></div>
+        </div>
+      </section></div>${LIVE ? "" : '<div class="modebar">Demo mode: data stays on this computer</div>'}`;
+    try { new QRCode($("#qr"), { text:url, width:300, height:300, colorDark:"#0a5534", colorLight:"#ffffff" }); } catch(e){}
+    const tick = () => { $("#clock").textContent = new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}); }; tick(); setInterval(tick, 15000);
+    setInterval(() => this.renderTicker(), 30000);
+    DB.onConn(ok => { const c = $("#conn"); if (!LIVE) return; c.className = "conn" + (ok ? "" : " off"); c.innerHTML = `<i></i>${ok ? "Live" : "Reconnecting…"}`; });
+    $("#tSim").onclick = () => simulate();
+    $("#tAuto").onclick = e => { if (this.auto){ clearInterval(this.auto); this.auto = null; e.target.classList.remove("on"); e.target.textContent = "▶ Auto demo"; } else { simulate(); this.auto = setInterval(simulate, 2200); e.target.classList.add("on"); e.target.textContent = "■ Stop demo"; } };
+    confirmTap($("#tReset"), "Click again to reset", () => { DB.reset(); this.prev = {}; this.seen = new Set(); });
+    $("#tbBoard").onclick = () => this.setTab("board"); $("#tbKiosk").onclick = () => this.setTab("kiosk");
+    this.update();
+  },
+  setTab(t){
+    this.tab = t;
+    $("#tbBoard").classList.toggle("on", t === "board"); $("#tbKiosk").classList.toggle("on", t === "kiosk");
+    $("#boardPane").classList.toggle("hidden", t !== "board"); $("#kioskPane").classList.toggle("hidden", t !== "kiosk");
+    const f = $("#kframe"); if (t === "kiosk" && !f.src) f.src = location.pathname + "?kiosk" + (qs.has("demo") ? "&demo" : "");
+  },
+  setNum(id, v){ const el = $("#"+id); if (!el) return; const s = String(v); if (el.textContent !== s){ el.textContent = s; if (this.prev[id] !== undefined){ el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); } this.prev[id] = s; } },
+  update(){
+    if (!$("#deps")) return;
+    const rs = allRides(), us = users(), seats = rs.reduce((s,r) => s + r.ps.length, 0);
+    const withP = rs.filter(r => r.ps.length);
+    const fuel = withP.length ? Math.round(withP.reduce((s,r) => s + (1 - 1/(1+r.ps.length)), 0) / withP.length * 100) : 0;
+    this.setNum("sUsers", Object.keys(us).length);
+    this.setNum("kRides", rs.length); this.setNum("kSeats", seats); this.setNum("kCars", seats);
+    this.setNum("kFuel", fuel + "%"); this.setNum("kPlus", Object.values(us).filter(u => u.plus).length);
+
+    // departures board
+    $("#depN").textContent = rs.length ? `${plural(rs.length,"car")} · ${plural(rs.reduce((s,r)=>s+r.left,0),"free seat")}` : "";
+    const deps = $("#deps");
+    if (!rs.length) setHTML(deps, `<div class="sempty" style="height:100%"><div><div class="big">🚗</div><b>No rides yet</b><div class="small">Drivers: scan the code and tap “Offer”.</div></div></div>`);
+    else {
+      const sig = r => r.id + r.ps.length + r.seats;
+      setHTML(deps, `<div class="dep head"><span>Time</span><span>From</span><span>Driver</span><span>Riders</span><span style="text-align:right">Seats</span></div>` + rs.map(r => `
+        <div class="dep ${this.seen.has(sig(r)) ? "" : "flash"}"><span class="tm">${r.time}</span>
+          <span class="fr"><b>${esc(zone(r.zone).name)}</b><span>${esc(r.note || zone(r.zone).towns)}</span></span>
+          <span class="dr">${avatar(r.driver)}<span>${esc(uname(r.driver))}</span></span>
+          <span class="avstack">${r.ps.map(p => avatar(p.uid)).join("") || '<span class="small muted">–</span>'}</span>
+          <span class="st">${seatDots(r)}<span class="status ${r.left ? "ok" : "full"}">${r.left ? plural(r.left,"left","left") : "Full"}</span></span></div>`).join(""));
+      rs.forEach(r => this.seen.add(sig(r)));
+    }
+
+    // schematic map
+    const byZone = {}; ZONES.forEach(z => byZone[z.id] = { people:0, rides:0 });
+    rs.forEach(r => { byZone[r.zone].rides++; byZone[r.zone].people += 1 + r.ps.length; });
+    Object.values(T.requests || {}).forEach(q => { if (byZone[q.zone]) byZone[q.zone].people++; });
+    const [cx, cy] = MAP.campus;
+    let svg = `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+      <path d="M0 0 H120 C95 70 70 120 60 170 C50 220 70 260 90 300 H0Z" fill="#e6f1f7"/><text x="14" y="150" fill="#8fb3c7" font-size="11" font-weight="600" transform="rotate(-90 14 150)" text-anchor="middle">Mediterranean</text>`;
+    ZONES.forEach(z => { const [x,y] = MAP[z.id], b = byZone[z.id]; if (b.rides) svg += `<line x1="${x}" y1="${y}" x2="${cx}" y2="${cy}" stroke="#0f7b4a" stroke-width="${Math.min(2+b.rides*1.5,7)}" stroke-linecap="round" class="flow" opacity=".75"/>`; else if (b.people) svg += `<line x1="${x}" y1="${y}" x2="${cx}" y2="${cy}" stroke="#f4a72a" stroke-width="2" stroke-dasharray="3 6" opacity=".8"/>`; });
+    ZONES.forEach(z => { const [x,y] = MAP[z.id], b = byZone[z.id], r = b.people ? Math.min(9 + b.people*2.2, 24) : 6;
+      svg += `<circle cx="${x}" cy="${y}" r="${r}" fill="${b.rides ? "#0f7b4a" : b.people ? "#f4a72a" : "#d9dfd9"}" opacity="${b.people ? .95 : .9}"/>`;
+      if (b.people) svg += `<text x="${x}" y="${y+4}" text-anchor="middle" fill="#fff" font-size="11" font-weight="800">${b.people}</text>`;
+      svg += `<text x="${x}" y="${y + r + 12}" text-anchor="middle" fill="#4b5563" font-size="10" font-weight="600">${z.name}</text>`; });
+    svg += `<circle cx="${cx}" cy="${cy}" r="15" fill="#e63946"/><text x="${cx}" y="${cy+4}" text-anchor="middle" font-size="12">🎓</text><text x="${cx+20}" y="${cy-12}" fill="#e63946" font-size="11" font-weight="800">USJ</text></svg>`;
+    setHTML($("#map"), svg);
+
+    // waiting list
+    const groups = requestGroups(), waitN = groups.reduce((s,g) => s + g.uids.length, 0);
+    $("#waitN").textContent = waitN ? plural(waitN,"person","people") : "";
+    setHTML($("#wait"), groups.length ? groups.map(g => `<span class="wchip">⏳ ${esc(zone(g.zone).name)} · ${g.time} <b>×${g.uids.length}</b></span>`).join("") : `<span class="small muted">Nobody waiting. Everyone has a seat!</span>`);
+    this.renderTicker();
+  },
+  renderTicker(){
+    const items = Object.values(T.feed || {}).sort((a,b) => b.at-a.at).slice(0,6);
+    setHTML($("#ticker"), items.length ? items.map(f => `<span class="tick">${f.icon} ${esc(f.text)} <span class="ago">${ago(f.at)}</span></span>`).join("") : `<span class="tick">👀 Waiting for the first classmate to scan…</span>`);
+  }
+};
+
+/* ---------- rehearsal simulator: behaves like real classmates ---------- */
+const FAKE = ["Maya","Karim","Rita","Elie","Nour","Joe","Lea","Charbel","Yara","Marc","Tia","Ralph","Christa","Georges","Sara","Hadi","Perla","Anthony"];
+function simulate(){
+  const us = users(), rs = allRides(), reqs = T.requests || {};
+  const busy = new Set([...rs.map(r => r.driver), ...rs.flatMap(r => r.ps.map(p => p.uid)), ...Object.keys(reqs)]);
+  const idle = Object.keys(us).filter(u => !busy.has(u) && u.startsWith("sim"));
+  const open = rs.filter(r => r.left);
+  const roll = Math.random();
+  const zones4 = ["metn-coast","upper-metn","beirut","keserwan","baabda"], times = ["7:30","8:00","8:30"];
+  const pick = a => a[Math.floor(Math.random()*a.length)];
+  const used = new Set(Object.values(us).map(u => u.name));
+  const newUser = drives => { const name = FAKE.find(n => !used.has(n)) || pick(FAKE)+" "+(Object.keys(us).length+1); const uid = "sim"+newId(); const z = pick(zones4), t = pick(times);
+    DB.set("users/"+uid, { name, zone:z, time:t, drives, at:Date.now() }); feed("👋", `${name} joined from ${zone(z).name}`); T.users = { ...us, [uid]: { name, zone:z, time:t, drives } }; return uid; };
+  // 1) a rider asking or joining
+  if (open.length && (roll < .45 || idle.length)){
+    const uid = idle.find(u => !us[u].drives) || newUser(false), r = open.find(x => x.zone === (users()[uid]||{}).zone) || pick(open);
+    DB.join(r.id, uid).then(ok => { if (ok){ DB.remove("requests/"+uid); feed("🤝", `${uname(uid)} joined ${uname(r.driver)}'s ${r.time} ride`); } });
+    return;
+  }
+  // 2) a new driver, often answering a request
+  if (roll < .75 || !rs.length){
+    const g = requestGroups()[0]; const uid = newUser(true); const z = g ? g.zone : us[uid] ? us[uid].zone : pick(zones4); const t = g ? g.time : pick(times); const seats = 2 + Math.floor(Math.random()*3);
+    const notes = ["", "Main roundabout", "Near the church", "Gas station on the highway", ""];
+    const rid = DB.push("rides", { driver:uid, zone:z, time:t, seats, note:pick(notes), weekly:false, at:Date.now() });
+    feed("🚗", `${uname(uid)} offered ${plural(seats,"seat")} from ${zone(z).name} at ${t}`);
+    if (g) setTimeout(() => g.uids.slice(0,seats).forEach(u => DB.join(rid, u).then(ok => { if (ok){ DB.remove("requests/"+u); feed("🤝", `${uname(u)} joined ${uname(uid)}'s ${t} ride`); } })), 900);
+    return;
+  }
+  // 3) someone asks for a ride, or buys Plus
+  if (roll < .9){ const uid = newUser(false), u = users()[uid] || {}; DB.set("requests/"+uid, { zone:u.zone || "metn-coast", time:u.time || "8:00", at:Date.now() }); feed("🙋", `${uname(uid)} is looking for a ride from ${zone(u.zone).name} at ${u.time}`); return; }
+  const np = Object.keys(us).filter(u => !us[u].plus); if (np.length){ const u = pick(np); DB.update("users/"+u, { plus:true }); feed("⭐", `${uname(u)} got Sadik Plus`); }
+}
+
+/* =========================================================
+   BOOT
+   ========================================================= */
+DB.on(tree => {
+  T = tree || {};
+  const first = !loaded; loaded = true;
+  if (MODE === "screen"){ if (first) Screen.mount(); else Screen.update(); return; }
+  if (first) mount(); else refresh();
+});
+window.addEventListener("hashchange", () => { $$(".overlay").forEach(o => o.remove()); mount(); });
+if (MODE === "app"){ mount(); setTimeout(() => { if (!loaded){ const m = $("#splashMsg"); if (m) m.innerHTML = "Still connecting… check your internet.<br><a href='' class='link'>Try again</a>"; } }, 7000); }
 </script>
 </body>
 </html>
