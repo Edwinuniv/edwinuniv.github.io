@@ -61,6 +61,17 @@
   .chatRow input{flex:1;padding:10px;border-radius:10px;border:2px solid var(--line);font-family:inherit}
   .chatRow button{background:var(--cedar);color:#fff;border:none;border-radius:10px;padding:0 16px;font-weight:700}
   .seatsWrap{margin-top:14px}
+  .plusBtn{display:block;width:100%;margin-top:12px;padding:14px;border:none;border-radius:12px;background:var(--red);color:#fff;font-weight:800;font-size:1rem}
+  .plusBtn.owned{background:#fff;color:var(--red);border:2px solid var(--red)}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:100;padding:18px}
+  .plusCard{background:#fff;border-radius:20px;padding:24px;max-width:380px;width:100%}
+  .plusCard h2{color:var(--red);font-size:1.5rem}
+  .plusCard .price{font-size:2.2rem;font-weight:800;margin:8px 0 2px}
+  .plusCard .price small{font-size:1rem;color:var(--muted);font-weight:400}
+  .plusCard ul{list-style:none;margin:14px 0}
+  .plusCard li{padding:6px 0;border-bottom:1px solid var(--line)}
+  .plusCard .note{font-size:.75rem;color:var(--muted);text-align:center;margin-top:8px}
+  .person.plus::before{content:"⭐ "}
 
   /* ---------- big screen view ---------- */
   .screen{display:grid;grid-template-columns:340px 1fr;min-height:100vh}
@@ -137,6 +148,7 @@
         <div class="stat"><b id="sGroups">0</b>ride groups found</div>
         <div class="stat"><b id="sCars">0</b>cars off the road</div>
         <div class="stat"><b id="sSave">0%</b>average fuel saved</div>
+      <div class="stat"><b id="sPlus">0</b>⭐ Plus members</div>
       </div>
       <div id="groups" class="grid"></div>
     </div>
@@ -299,6 +311,7 @@ function initRideWidget(prefix, nsKey, container){
         <p id="${prefix}resText" class="tag"></p>
         <div id="${prefix}resPeople" class="people"></div>
         <div id="${prefix}resSave" class="save"></div>
+        <button id="${prefix}plusBtn" class="plusBtn">⭐ Get Sadik Plus · $2/month</button>
         <div id="${prefix}chatWrap" class="hidden">
           <button id="${prefix}chatToggle" class="chatBtn">💬 Open group chat</button>
           <div id="${prefix}chatPanel" class="chatPanel hidden">
@@ -370,7 +383,7 @@ function initRideWidget(prefix, nsKey, container){
     $("resCount").textContent=others.length;
     $("resTitle").textContent=`${zoneName(me.zone)} · ${me.time}`;
     $("resText").textContent= others.length ? `classmate${others.length>1?"s":""} leave from your area at the same time!` : "No match yet… wait a few seconds 👀";
-    $("resPeople").innerHTML=mates.map(r=>`<span class="person ${r.car==="yes"?"car":""}">${esc(r.name)}${r.car==="yes"&&r.seats?` (${r.seats} seat${r.seats>1?"s":""})`:""}${r.id===myId?" (you)":""}</span>`).join("");
+    $("resPeople").innerHTML=mates.map(r=>`<span class="person ${r.car==="yes"?"car":""} ${r.plus?"plus":""}">${esc(r.name)}${r.car==="yes"&&r.seats?` (${r.seats} seat${r.seats>1?"s":""})`:""}${r.id===myId?" (you)":""}</span>`).join("");
     if(others.length){
       if(info.drivers===0){
         $("resSave").innerHTML = `Nobody drives yet. Ask a friend with a car to join and you're all set!`;
@@ -390,6 +403,7 @@ function initRideWidget(prefix, nsKey, container){
       chatGroupKey=null;
     }
     renderBrowseList(me);
+    renderPlus();
   }
 
   function renderBrowseList(me){
@@ -454,6 +468,22 @@ function initRideWidget(prefix, nsKey, container){
     $("chatInput").addEventListener("keydown",e=>{ if(e.key==="Enter") sendChat(); });
   }
 
+  function renderPlus(){
+    const me=last.find(r=>r.id===myId), b=$("plusBtn");
+    if(!me||!b) return;
+    b.textContent = me.plus ? "⭐ You're a Sadik Plus member" : "⭐ Get Sadik Plus · $2/month";
+    b.classList.toggle("owned", !!me.plus);
+  }
+  $("plusBtn").onclick=()=>{
+    const me=last.find(r=>r.id===myId); if(!me||me.plus) return;
+    openPlus(()=>{
+      const r={...me,plus:true}; delete r.id;
+      Store.update(myId,r);
+      last=last.map(x=>x.id===myId?{...r,id:myId}:x);
+      render();
+    });
+  };
+
   async function shareApp(zone){
     const url=location.href.split("?")[0];
     const text=`Join me on Sadik to find a ride from ${zone} to USJ! 🚗`;
@@ -470,6 +500,32 @@ function initRideWidget(prefix, nsKey, container){
   }
 
   if(myId) show(true);
+}
+
+function openPlus(onBuy){
+  const o=document.createElement("div"); o.className="overlay";
+  o.innerHTML=`<div class="plusCard">
+    <h2>⭐ Sadik Plus</h2>
+    <div class="price">$2 <small>/ month · or $10 per semester</small></div>
+    <ul>
+      <li>⛽ Fuel-split calculator: everyone knows what to pay</li>
+      <li>✅ Verified USJ students only</li>
+      <li>📅 Book your seat for the whole week</li>
+      <li>⏰ Ride reminders the night before</li>
+    </ul>
+    <button class="go" id="plusBuy">Get Plus</button>
+    <button class="link" id="plusClose" style="display:block;margin:10px auto 0">Maybe later</button>
+    <p class="note">Class demo: no real payment is taken.</p>
+  </div>`;
+  document.body.appendChild(o);
+  const close=()=>o.remove();
+  o.querySelector("#plusClose").onclick=close;
+  o.onclick=e=>{ if(e.target===o) close(); };
+  o.querySelector("#plusBuy").onclick=()=>{
+    o.querySelector(".plusCard").innerHTML=`<h2>🎉 Welcome to Plus!</h2><p class="tag" style="margin:10px 0 16px">Your ride to USJ just got easier. Yalla!</p><button class="go" id="plusDone">Done</button>`;
+    o.querySelector("#plusDone").onclick=close;
+    onBuy();
+  };
 }
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -501,13 +557,14 @@ function screen(){
     document.getElementById("sGroups").textContent=real.length;
     document.getElementById("sCars").textContent=Math.max(0,carsBefore-carsAfter);
     document.getElementById("sSave").textContent=avg+"%";
+    document.getElementById("sPlus").textContent=list.filter(r=>r.plus).length;
     const el=document.getElementById("groups");
     if(!list.length){ el.innerHTML=`<div class="empty">Waiting for the first classmate to scan… 📱</div>`; return; }
     el.innerHTML=groups.map(g=>{
       const info=seatInfo(g.people);
       return `<div class="group ${g.people.length>1?"":"solo"}">
         <h3>📍 ${zoneName(g.zone)}</h3><div class="when">Leaving at ${g.time}</div>
-        <div class="people">${g.people.map(p=>`<span class="person ${p.car==="yes"?"car":""}">${esc(p.name)}</span>`).join("")}</div>
+        <div class="people">${g.people.map(p=>`<span class="person ${p.car==="yes"?"car":""} ${p.plus?"plus":""}">${esc(p.name)}</span>`).join("")}</div>
         ${g.people.length>1?`<span class="badge">${info.drivers?`${info.seatTotal} seat${info.seatTotal!==1?"s":""} free`:"Needs a driver"}</span>`:""}
       </div>`;
     }).join("");
