@@ -44,6 +44,14 @@
   .person.car::after{content:" 🚗"}
   .save{background:var(--cedar);color:#fff;border-radius:14px;padding:14px;font-weight:600}
   .shareBtn{display:block;width:100%;margin-top:10px;padding:12px;border:none;border-radius:10px;background:#fff;color:var(--cedar-dark);font-weight:700;font-size:.95rem}
+  .browseTitle{font-size:1rem;color:var(--muted);margin:4px 2px 10px}
+  .rideRow{background:var(--card);border-radius:16px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  .rideRow.mine{border:2px solid var(--cedar)}
+  .rideRow .info b{display:block;font-size:1rem}
+  .rideRow .info span{color:var(--muted);font-size:.85rem}
+  .joinBtn{flex-shrink:0;background:var(--cedar);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem}
+  .joinBtn:disabled{background:var(--line);color:var(--muted)}
+  .noRides{color:var(--muted);text-align:center;padding:18px 0}
   .link{background:none;border:none;color:var(--muted);text-decoration:underline;margin-top:14px;font-size:.9rem}
 
   /* ---------- big screen view ---------- */
@@ -107,12 +115,16 @@
 
   <div id="result" class="hidden">
     <div class="card result">
-      <h2 id="resTitle">Your ride group</h2>
+      <h2 id="resTitle">My ride</h2>
       <div class="big" id="resCount">0</div>
       <p id="resText" class="tag"></p>
       <div id="resPeople" class="people"></div>
       <div id="resSave" class="save"></div>
     </div>
+
+    <h3 class="browseTitle">Or join another ride 👇</h3>
+    <div id="browseList"></div>
+
     <p class="tag" style="text-align:center">This updates live as classmates join 👀</p>
     <div style="text-align:center"><button class="link" id="again">Change my answers</button></div>
   </div>
@@ -275,6 +287,33 @@ function phone(){
       const btn=document.getElementById("shareBtn");
       if(btn) btn.onclick=()=>shareApp(zoneName(me.zone));
     }
+    renderBrowseList(me);
+  }
+  function renderBrowseList(me){
+    const groups=groupRiders(last);
+    const other=groups.filter(g=>!(g.zone===me.zone&&g.time===me.time));
+    const el=$("browseList");
+    if(!other.length){ el.innerHTML=`<div class="noRides">No other rides posted yet — check back soon, or share Sadik with classmates!</div>`; return; }
+    el.innerHTML=other.map(g=>{
+      const d=g.people.filter(p=>p.car==="yes").length;
+      const names=g.people.map(p=>p.name).join(", ");
+      return `<div class="rideRow">
+        <div class="info"><b>📍 ${zoneName(g.zone)} · ${g.time}</b><span>${names}${d?` · ${d} driver${d>1?"s":""}`:" · no driver yet"}</span></div>
+        <button class="joinBtn" data-zone="${g.zone}" data-time="${g.time}">Join</button>
+      </div>`;
+    }).join("");
+    el.querySelectorAll(".joinBtn").forEach(b=>{
+      b.onclick=()=>joinGroup(b.dataset.zone,b.dataset.time);
+    });
+  }
+  function joinGroup(zone,time){
+    const me=last.find(r=>r.id===myId); if(!me) return;
+    const r={...me,zone,time};
+    delete r.id;
+    Store.update(myId,r);
+    last=last.map(x=>x.id===myId?{...r,id:myId}:x);
+    render();
+    window.scrollTo({top:0,behavior:"smooth"});
   }
   async function shareApp(zone){
     const url=location.href.split("?")[0];
