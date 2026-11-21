@@ -43,6 +43,7 @@
   .person{background:#eaf6ef;color:var(--cedar-dark);border-radius:999px;padding:6px 12px;font-weight:600}
   .person.car::after{content:" 🚗"}
   .save{background:var(--cedar);color:#fff;border-radius:14px;padding:14px;font-weight:600}
+  .shareBtn{display:block;width:100%;margin-top:10px;padding:12px;border:none;border-radius:10px;background:#fff;color:var(--cedar-dark);font-weight:700;font-size:.95rem}
   .link{background:none;border:none;color:var(--muted);text-decoration:underline;margin-top:14px;font-size:.9rem}
 
   /* ---------- big screen view ---------- */
@@ -265,10 +266,29 @@ function phone(){
     $("resTitle").textContent=`${zoneName(me.zone)} · ${me.time}`;
     $("resText").textContent= others.length ? `classmate${others.length>1?"s":""} leave from your area at the same time!` : "No match yet… wait a few seconds 👀";
     $("resPeople").innerHTML=mates.map(r=>`<span class="person ${r.car==="yes"?"car":""}">${esc(r.name)}${r.id===myId?" (you)":""}</span>`).join("");
-    $("resSave").innerHTML = others.length
-      ? (drivers? `🚗 ${drivers} driver${drivers>1?"s":""} in your group. Split the fuel ${mates.length} ways and save about <b>${savedPct(mates.length)}%</b>.`
-                : `Nobody drives yet. Ask a friend with a car to join and you're all set!`)
-      : `Share the link with friends from ${zoneName(me.zone)}!`;
+    if(others.length){
+      $("resSave").innerHTML = drivers
+        ? `🚗 ${drivers} driver${drivers>1?"s":""} in your group. Split the fuel ${mates.length} ways and save about <b>${savedPct(mates.length)}%</b>.`
+        : `Nobody drives yet. Ask a friend with a car to join and you're all set!`;
+    } else {
+      $("resSave").innerHTML = `Share the link with friends from ${zoneName(me.zone)}! <button id="shareBtn" class="shareBtn">📤 Share Sadik</button>`;
+      const btn=document.getElementById("shareBtn");
+      if(btn) btn.onclick=()=>shareApp(zoneName(me.zone));
+    }
+  }
+  async function shareApp(zone){
+    const url=location.href.split("?")[0];
+    const text=`Join me on Sadik to find a ride from ${zone} to USJ! 🚗`;
+    if(navigator.share){
+      try{ await navigator.share({title:"Sadik",text,url}); return; }catch(e){ /* user cancelled or unsupported, fall through */ }
+    }
+    try{
+      await navigator.clipboard.writeText(`${text} ${url}`);
+      const btn=document.getElementById("shareBtn");
+      if(btn){ const old=btn.textContent; btn.textContent="✅ Link copied!"; setTimeout(()=>btn.textContent=old,1800); }
+    }catch(e){
+      prompt("Copy this link:", url);
+    }
   }
   if(myId) show(true);
 }
